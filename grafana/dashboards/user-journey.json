@@ -1,0 +1,82 @@
+{
+  "id": 3,
+  "title": "User Journey Analytics",
+  "tags": ["analytics", "user-journey"],
+  "timezone": "browser",
+  "panels": [
+    {
+      "id": 1,
+      "title": "User Activity Heatmap",
+      "type": "heatmap",
+      "targets": [
+        {
+          "datasource": "ClickHouse",
+          "rawSql": "SELECT toHour(timestamp) as hour, toDayOfWeek(timestamp) as day, count(*) as activity FROM (SELECT timestamp FROM analytics.user_events_mv WHERE timestamp >= now() - INTERVAL 7 DAY UNION ALL SELECT timestamp FROM analytics.interaction_events_mv WHERE timestamp >= now() - INTERVAL 7 DAY) GROUP BY hour, day ORDER BY day, hour"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0}
+    },
+    {
+      "id": 2,
+      "title": "User Retention",
+      "type": "table",
+      "targets": [
+        {
+          "datasource": "ClickHouse",
+          "rawSql": "SELECT registration_date, count(*) as registered_users, countIf(login_date IS NOT NULL) as returned_users, round(countIf(login_date IS NOT NULL) * 100.0 / count(*), 2) as retention_rate FROM (SELECT user_id, min(timestamp) as registration_date FROM analytics.user_events_mv WHERE event_type = 'user_registered' GROUP BY user_id) r LEFT JOIN (SELECT user_id, min(timestamp) as login_date FROM analytics.user_events_mv WHERE event_type = 'user_login' GROUP BY user_id) l USING user_id WHERE registration_date >= today() - INTERVAL 7 DAY GROUP BY registration_date ORDER BY registration_date DESC"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+    },
+    {
+      "id": 3,
+      "title": "Most Clicked Elements",
+      "type": "table",
+      "targets": [
+        {
+          "datasource": "ClickHouse",
+          "rawSql": "SELECT element_name, count(*) as clicks, uniq(user_id) as unique_users FROM analytics.interaction_events_mv WHERE event_type = 'element_click' AND timestamp >= today() AND element_name IS NOT NULL GROUP BY element_name ORDER BY clicks DESC LIMIT 15"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+    },
+    {
+      "id": 4,
+      "title": "Search Effectiveness",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": "ClickHouse",
+          "rawSql": "SELECT toStartOfHour(s.timestamp) as time, count(*) as searches, countIf(c.user_id IS NOT NULL) as searches_with_clicks FROM analytics.interaction_events_mv s LEFT JOIN analytics.interaction_events_mv c ON s.user_id = c.user_id AND c.event_type = 'element_click' AND c.timestamp BETWEEN s.timestamp AND s.timestamp + INTERVAL 5 MINUTE WHERE s.event_type = 'search' AND s.timestamp >= now() - INTERVAL 24 HOUR GROUP BY time ORDER BY time"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 16}
+    },
+    {
+      "id": 5,
+      "title": "Filter Usage",
+      "type": "barchart",
+      "targets": [
+        {
+          "datasource": "ClickHouse",
+          "rawSql": "SELECT filter_name, count(*) as usage_count FROM analytics.interaction_events_mv WHERE event_type = 'filter_applied' AND timestamp >= today() AND filter_name IS NOT NULL GROUP BY filter_name ORDER BY usage_count DESC"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}
+    },
+    {
+      "id": 6,
+      "title": "User Journey Path",
+      "type": "table",
+      "targets": [
+        {
+          "datasource": "ClickHouse",
+          "rawSql": "SELECT event_type, count(*) as count, avg(time_diff) as avg_time_between_events FROM (SELECT user_id, timestamp, event_type, timestamp - lag(timestamp) OVER (PARTITION BY user_id ORDER BY timestamp) as time_diff FROM (SELECT user_id, timestamp, event_type FROM analytics.user_events_mv WHERE timestamp >= today() UNION ALL SELECT user_id, timestamp, event_type FROM analytics.interaction_events_mv WHERE timestamp >= today())) WHERE time_diff IS NOT NULL GROUP BY event_type ORDER BY count DESC"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24}
+    }
+  ],
+  "time": {"from": "now-24h", "to": "now"},
+  "refresh": "1m"
+}

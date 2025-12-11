@@ -1,0 +1,77 @@
+1. регистрация "event_type": "user_registered",
+"user_id": "u123",
+"timestamp": "2025-11-30T12:00:00Z"
+
+2. user_login
+Фиксирует факт авторизации
+пользователя.
+"event_type": "user_login",
+"user_id": "u123"
+"timestamp": "2025-11-30T12:00:00Z"
+
+3. transaction
+Любая финансовая операция.
+Копировать
+"event_type": "transaction"
+"transaction_id": "t55",
+"user_id": "u123"
+"amount": 19.99,
+"currency": "USD",
+"timestamp": "2025-11-30T12:00:00Z"
+
+4. element_click
+Клик по любому элементу интерфейса.
+"event_type": "element_click",
+"user_id": "u123"
+"element_name": "buy_button"
+"page": "/product/125" (nullable)
+"timestamp": "2095-11-30T12:00:00Z"
+
+
+5. search
+Поиск или ввод слова в строку поиска /
+каталоге.
+"event_type": "search",
+"user_id": "u123"
+"query": "яблоко",
+"timestamp": "2025-11-30T12:00:00Z"
+
+
+6. page_view
+Фиксирует просмотр страницы или
+экрана
+"event_type": "page_view",
+"user_id": "u123"
+"page": "/catalog"
+"timestamp": "2025-11-30T12:00:00Z"
+
+
+7. form_submit
+Отправка формы: регистрация,
+обратная связь, заявка, фильтр и т.п.
+"event_type": "form_submit",
+"user_id": "u123",
+"form_name": "feedback_form"
+"timestamp": "2025-11-30T12:00:00Z"
+
+
+9. item_added_to_cart /
+item_removed_from_cart
+Если есть корзина или
+аналогичная сущность.
+"event_type": "item_added_to_cart"
+"user_id": "u123",
+"item_id": "product_42"
+"timestamp": "2025-11-30T12:00:00Z"
+
+
+10. filter_applied
+Когда пользователь применяет фильтры
+или сортировки в каталоге.
+
+"event_type": "filter_applied",
+"user_id": "u123"
+"filter_name": "price_range",
+"filter_value". "100-500"
+"page": "/catalog"
+"timestamp": " V -11-30T12:00:00Z"
