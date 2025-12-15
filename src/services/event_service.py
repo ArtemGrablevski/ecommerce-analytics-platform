@@ -1,6 +1,6 @@
 import dataclasses
 
-from src.dto.dataclass_events import (
+from src.dto.events import (
     BaseEvent,
     ElementClickEventDto,
     FilterAppliedEventDto,
@@ -22,7 +22,11 @@ class EventService:
         self.producer = producer
 
     async def process_event(self, event: BaseEvent) -> None:
-        event_data = dataclasses.asdict(event)
+        timestamp_str = event.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        event_data = {
+            "user_id": event.user_id,
+            "timestamp": timestamp_str
+        }
 
         match event:
             case UserRegisteredEventDto():
@@ -32,28 +36,57 @@ class EventService:
                 event_data["event_type"] = EventType.USER_LOGIN
                 await self.producer.send_event(KafkaTopic.USER_EVENTS, event_data)
             case TransactionEventDto():
-                event_data["event_type"] = EventType.TRANSACTION
+                event_data.update({
+                    "transaction_id": event.transaction_id,
+                    "amount": float(event.amount),
+                    "currency": event.currency,
+                    "event_type": EventType.TRANSACTION
+                })
                 await self.producer.send_event(KafkaTopic.TRANSACTION_EVENTS, event_data)
             case ElementClickEventDto():
-                event_data["event_type"] = EventType.ELEMENT_CLICK
+                event_data.update({
+                    "element_name": event.element_name,
+                    "page": event.page,
+                    "event_type": EventType.ELEMENT_CLICK
+                })
                 await self.producer.send_event(KafkaTopic.INTERACTION_EVENTS, event_data)
             case SearchEventDto():
-                event_data["event_type"] = EventType.SEARCH
+                event_data.update({
+                    "query": event.query,
+                    "event_type": EventType.SEARCH
+                })
                 await self.producer.send_event(KafkaTopic.INTERACTION_EVENTS, event_data)
             case PageViewEventDto():
-                event_data["event_type"] = EventType.PAGE_VIEW
+                event_data.update({
+                    "page": event.page,
+                    "event_type": EventType.PAGE_VIEW
+                })
                 await self.producer.send_event(KafkaTopic.INTERACTION_EVENTS, event_data)
             case FormSubmitEventDto():
-                event_data["event_type"] = EventType.FORM_SUBMIT
+                event_data.update({
+                    "form_name": event.form_name,
+                    "event_type": EventType.FORM_SUBMIT
+                })
                 await self.producer.send_event(KafkaTopic.INTERACTION_EVENTS, event_data)
             case ItemAddedToCartEventDto():
-                event_data["event_type"] = EventType.ITEM_ADDED_TO_CART
+                event_data.update({
+                    "item_id": event.item_id,
+                    "event_type": EventType.ITEM_ADDED_TO_CART
+                })
                 await self.producer.send_event(KafkaTopic.INTERACTION_EVENTS, event_data)
             case ItemRemovedFromCartEventDto():
-                event_data["event_type"] = EventType.ITEM_REMOVED_FROM_CART
+                event_data.update({
+                    "item_id": event.item_id,
+                    "event_type": EventType.ITEM_REMOVED_FROM_CART
+                })
                 await self.producer.send_event(KafkaTopic.INTERACTION_EVENTS, event_data)
             case FilterAppliedEventDto():
-                event_data["event_type"] = EventType.FILTER_APPLIED
+                event_data.update({
+                    "filter_name": event.filter_name,
+                    "filter_value": event.filter_value,
+                    "page": event.page,
+                    "event_type": EventType.FILTER_APPLIED
+                })
                 await self.producer.send_event(KafkaTopic.INTERACTION_EVENTS, event_data)
             case _:
-                raise ValueError(f"Unknown event type: {type(event)}")
+                raise ValueError(f"Unknown event: {type(event)} {event}")

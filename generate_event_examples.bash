@@ -10,7 +10,7 @@ for i in {1..10}; do
         -H "Content-Type: application/json" \
         -d '{
             "user_id": "user_'$i'",
-            "timestamp": "2025-12-10T12:0'$((i % 6))':"'$((10 + i))'".000Z"
+            "timestamp": "2025-12-15T12:0'$((i % 6))':'$((10 + i % 50))'.000Z"
         }'
     echo
 done
@@ -21,7 +21,7 @@ for i in {1..12}; do
         -H "Content-Type: application/json" \
         -d '{
             "user_id": "user_'$((i % 5 + 1))'",
-            "timestamp": "2025-12-10T13:0'$((i % 6))':"'$((20 + i))'".000Z"
+            "timestamp": "2025-12-15T13:0'$((i % 6))':'$((20 + i % 40))'.000Z"
         }'
     echo
 done
@@ -37,7 +37,7 @@ for i in {1..8}; do
             "transaction_id": "txn_'$i'",
             "amount": "'${amounts[$((i-1))]}'",
             "currency": "'${currencies[$((i-1))]}'",
-            "timestamp": "2025-12-10T14:0'$((i % 6))':"'$((30 + i))'".000Z"
+            "timestamp": "2025-12-15T14:0'$((i % 6))':'$((30 + i % 30))'.000Z"
         }'
     echo
 done
@@ -59,7 +59,7 @@ for i in {1..8}; do
             "user_id": "user_'$((i % 4 + 1))'",
             "element_name": "'${elements[$((i-1))]}'",
             "page": '$page_json',
-            "timestamp": "2025-12-10T15:0'$((i % 6))':"'$((40 + i))'".000Z"
+            "timestamp": "2025-12-15T15:0'$((i % 6))':'$((40 + i % 20))'.000Z"
         }'
     echo
 done
@@ -72,7 +72,7 @@ for i in {1..9}; do
         -d '{
             "user_id": "user_'$((i % 3 + 1))'",
             "query": "'${queries[$((i-1))]}'",
-            "timestamp": "2025-12-10T16:0'$((i % 6))':"'$((50 + i))'".000Z"
+            "timestamp": "2025-12-15T16:0'$((i % 6))':'$((50 + i % 10))'.000Z"
         }'
     echo
 done
@@ -85,7 +85,7 @@ for i in {1..8}; do
         -d '{
             "user_id": "user_'$((i % 5 + 1))'",
             "page": "'${pages[$((i-1))]}'",
-            "timestamp": "2025-12-10T17:0'$((i % 6))':"'$((60 + i))'".000Z"
+            "timestamp": "2025-12-15T17:0'$((i % 6))':'$(printf "%02d" $((i % 60)))'.000Z"
         }'
     echo
 done
@@ -98,7 +98,7 @@ for i in {1..8}; do
         -d '{
             "user_id": "user_'$((i % 4 + 1))'",
             "form_name": "'${forms[$((i-1))]}'",
-            "timestamp": "2025-12-10T18:0'$((i % 6))':"'$((70 + i))'".000Z"
+            "timestamp": "2025-12-15T18:0'$((i % 6))':'$((10 + i % 50))'.000Z"
         }'
     echo
 done
@@ -111,7 +111,7 @@ for i in {1..10}; do
         -d '{
             "user_id": "user_'$((i % 3 + 1))'",
             "item_id": "'${items[$((i-1))]}'",
-            "timestamp": "2025-12-10T19:0'$((i % 6))':"'$((80 + i))'".000Z"
+            "timestamp": "2025-12-15T19:0'$((i % 6))':'$((20 + i % 40))'.000Z"
         }'
     echo
 done
@@ -123,7 +123,7 @@ for i in {1..8}; do
         -d '{
             "user_id": "user_'$((i % 3 + 1))'",
             "item_id": "product_'$i'",
-            "timestamp": "2025-12-10T20:0'$((i % 6))':"'$((90 + i))'".000Z"
+            "timestamp": "2025-12-15T20:0'$((i % 6))':'$((30 + i % 30))'.000Z"
         }'
     echo
 done
@@ -140,7 +140,7 @@ for i in {1..8}; do
             "filter_name": "'${filters[$((i-1))]}'",
             "filter_value": "'${filter_values[$((i-1))]}'",
             "page": "'${filter_pages[$((i-1))]}'",
-            "timestamp": "2025-12-10T21:0'$((i % 6))':"'$((100 + i))'".000Z"
+            "timestamp": "2025-12-15T21:0'$((i % 6))':'$((40 + i % 20))'.000Z"
         }'
     echo
 done

@@ -1,68 +1,66 @@
+from abc import ABC
+from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
 from typing import Optional
 
-from pydantic import BaseModel
 
-
-class UserRegisteredEvent(BaseModel):
+@dataclass
+class BaseEvent(ABC):
     user_id: str
     timestamp: datetime
 
 
-class UserLoginEvent(BaseModel):
-    user_id: str
-    timestamp: datetime
+@dataclass
+class UserRegisteredEventDto(BaseEvent):
+    ...
 
 
-class TransactionEvent(BaseModel):
+@dataclass
+class UserLoginEventDto(BaseEvent):
+    ...
+
+
+@dataclass
+class TransactionEventDto(BaseEvent):
     transaction_id: str
-    user_id: str
     amount: Decimal
     currency: str
-    timestamp: datetime
 
 
-class ElementClickEvent(BaseModel):
-    user_id: str
+@dataclass
+class ElementClickEventDto(BaseEvent):
     element_name: str
     page: Optional[str] = None
-    timestamp: datetime
 
 
-class SearchEvent(BaseModel):
-    user_id: str
+@dataclass
+class SearchEventDto(BaseEvent):
     query: str
-    timestamp: datetime
 
 
-class PageViewEvent(BaseModel):
-    user_id: str
+@dataclass
+class PageViewEventDto(BaseEvent):
     page: str
-    timestamp: datetime
 
 
-class FormSubmitEvent(BaseModel):
-    user_id: str
+@dataclass
+class FormSubmitEventDto(BaseEvent):
     form_name: str
-    timestamp: datetime
 
 
-class ItemAddedToCartEvent(BaseModel):
-    user_id: str
+@dataclass
+class ItemAddedToCartEventDto(BaseEvent):
     item_id: str
-    timestamp: datetime
 
 
-class ItemRemovedFromCartEvent(BaseModel):
-    user_id: str
+@dataclass
+class ItemRemovedFromCartEventDto(BaseEvent):
     item_id: str
-    timestamp: datetime
 
 
-class FilterAppliedEvent(BaseModel):
-    user_id: str
+@dataclass
+class FilterAppliedEventDto(BaseEvent):
     filter_name: str
     filter_value: str
     page: str
-    timestamp: datetime

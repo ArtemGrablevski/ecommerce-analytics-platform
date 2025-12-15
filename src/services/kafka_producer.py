@@ -1,5 +1,7 @@
 import json
 from abc import ABC, abstractmethod
+from datetime import datetime
+from decimal import Decimal
 from typing import Any
 
 from aiokafka import AIOKafkaProducer
@@ -12,13 +14,16 @@ class EventProducerInterface(ABC):
 
 
 class KafkaEventProducer(EventProducerInterface):
-    def __init__(self, bootstrap_servers: str = "localhost:9092"):
+    def __init__(self, bootstrap_servers: str):
         self.bootstrap_servers = bootstrap_servers
         self.producer: AIOKafkaProducer | None = None
 
+    def _serialize_value(self, value: Any) -> bytes:
+        return json.dumps(value).encode("utf-8")
+
     async def start(self) -> None:
         self.producer = AIOKafkaProducer(
-            bootstrap_servers=self.bootstrap_servers, value_serializer=lambda v: json.dumps(v).encode("utf-8")
+            bootstrap_servers=self.bootstrap_servers, value_serializer=self._serialize_value
         )
         await self.producer.start()
 
@@ -29,4 +34,5 @@ class KafkaEventProducer(EventProducerInterface):
     async def send_event(self, topic: str, event: dict[str, Any]) -> None:
         if not self.producer:
             raise RuntimeError("Producer not started")
-        await self.producer.send(topic, event)
+        topic_name = topic.value if hasattr(topic, "value") else str(topic)
+        await self.producer.send(topic_name, event)

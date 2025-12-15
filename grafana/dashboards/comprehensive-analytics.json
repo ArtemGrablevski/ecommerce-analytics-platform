@@ -1,0 +1,342 @@
+{
+  "id": null,
+  "title": "Comprehensive Analytics Dashboard",
+  "tags": ["analytics", "comprehensive", "business-metrics"],
+  "timezone": "browser",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Daily Active Users (DAU)",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT uniq(user_id) FROM analytics.user_events_mv WHERE toDate(timestamp) = today() AND event_type = 'user_login'"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "unit": "users",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 100},
+              {"color": "green", "value": 500}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Weekly Active Users (WAU)", 
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT uniq(user_id) FROM analytics.user_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY AND event_type = 'user_login'"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 6, "y": 0},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "unit": "users",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 500},
+              {"color": "green", "value": 2000}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Monthly Active Users (MAU)",
+      "type": "stat", 
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT uniq(user_id) FROM analytics.user_events_mv WHERE timestamp >= today() - INTERVAL 30 DAY AND event_type = 'user_login'"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 12, "y": 0},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "unit": "users",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 2000},
+              {"color": "green", "value": 10000}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "New Registrations Today",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT count() FROM analytics.user_events_mv WHERE toDate(timestamp) = today() AND event_type = 'user_registered'"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 18, "y": 0},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "unit": "users",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 10},
+              {"color": "green", "value": 50}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "Daily Revenue",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT sum(amount) FROM analytics.transaction_events_mv WHERE toDate(timestamp) = today()"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 0, "y": 8},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "unit": "currencyUSD",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 1000},
+              {"color": "green", "value": 5000}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Average Order Value (AOV)",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT avg(amount) FROM analytics.transaction_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 6, "y": 8},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "unit": "currencyUSD",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 50},
+              {"color": "green", "value": 100}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "ARPU (7 days)",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT sum(amount) / uniq(user_id) FROM analytics.transaction_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 12, "y": 8},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "unit": "currencyUSD",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 25},
+              {"color": "green", "value": 75}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Total Transactions Today",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT count() FROM analytics.transaction_events_mv WHERE toDate(timestamp) = today()"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 18, "y": 8},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "unit": "transactions",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 50},
+              {"color": "green", "value": 200}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "Revenue Trend (30 days)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT toDate(timestamp) as date, sum(amount) as revenue FROM analytics.transaction_events_mv WHERE timestamp >= today() - INTERVAL 30 DAY GROUP BY date ORDER BY date"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "id": 10,
+      "title": "User Activity Trend (30 days)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT toDate(timestamp) as date, uniq(user_id) as active_users FROM analytics.user_events_mv WHERE timestamp >= today() - INTERVAL 30 DAY AND event_type = 'user_login' GROUP BY date ORDER BY date"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+      "fieldConfig": {
+        "defaults": {
+          "unit": "users",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "id": 11,
+      "title": "Top Pages by Views",
+      "type": "table",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API", 
+          "rawSql": "SELECT page, count() as views FROM analytics.interaction_events_mv WHERE event_type = 'page_view' AND timestamp >= today() - INTERVAL 7 DAY AND page IS NOT NULL GROUP BY page ORDER BY views DESC LIMIT 10"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 24}
+    },
+    {
+      "id": 12,
+      "title": "User Events Distribution",
+      "type": "piechart",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT event_type, count() as count FROM analytics.user_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY GROUP BY event_type"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 24}
+    },
+    {
+      "id": 13,
+      "title": "Search Queries",
+      "type": "table",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT query, count() as search_count FROM analytics.interaction_events_mv WHERE event_type = 'search' AND timestamp >= today() - INTERVAL 7 DAY AND query IS NOT NULL GROUP BY query ORDER BY search_count DESC LIMIT 10"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 24}
+    },
+    {
+      "id": 14,
+      "title": "Hourly Activity Heatmap",
+      "type": "heatmap",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT toHour(timestamp) as hour, toDayOfWeek(timestamp) as day_of_week, count() as activity FROM analytics.user_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY GROUP BY hour, day_of_week ORDER BY day_of_week, hour"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32}
+    },
+    {
+      "id": 15,
+      "title": "Transaction Volume by Currency",
+      "type": "barchart",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT currency, count() as transactions, sum(amount) as total_amount FROM analytics.transaction_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY GROUP BY currency ORDER BY transactions DESC"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32}
+    },
+    {
+      "id": 16,
+      "title": "Most Clicked Elements",
+      "type": "table",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT element_name, count() as clicks FROM analytics.interaction_events_mv WHERE event_type = 'element_click' AND timestamp >= today() - INTERVAL 7 DAY AND element_name IS NOT NULL GROUP BY element_name ORDER BY clicks DESC LIMIT 10"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 40}
+    },
+    {
+      "id": 17,
+      "title": "User Registration Trend",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT toDate(timestamp) as date, count() as registrations FROM analytics.user_events_mv WHERE event_type = 'user_registered' AND timestamp >= today() - INTERVAL 30 DAY GROUP BY date ORDER BY date"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 40}
+    },
+    {
+      "id": 18,
+      "title": "Filter Usage",
+      "type": "table",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT filter_name, filter_value, count() as usage_count FROM analytics.interaction_events_mv WHERE event_type = 'filter_applied' AND timestamp >= today() - INTERVAL 7 DAY AND filter_name IS NOT NULL GROUP BY filter_name, filter_value ORDER BY usage_count DESC LIMIT 15"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 40}
+    }
+  ],
+  "time": {"from": "now-30d", "to": "now"},
+  "refresh": "1m"
+}

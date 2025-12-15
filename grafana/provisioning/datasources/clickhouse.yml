@@ -5,11 +5,17 @@ datasources:
     type: grafana-clickhouse-datasource
     access: proxy
     url: http://clickhouse:8123
-    database: analytics
     basicAuth: false
     isDefault: true
     jsonData:
-      defaultDatabase: analytics
+      host: clickhouse
+      port: 8123
       username: default
+      defaultDatabase: analytics
+      protocol: http
+      useYAMLConfig: false
+      useCustomSettings: true
+      customSettings: "max_result_rows=10000"
+    secureJsonData:
       password: ""
     editable: true

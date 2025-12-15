@@ -2,7 +2,7 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends
 
 from src.di import Container
-from src.dto.dataclass_events import (
+from src.dto.events import (
     ElementClickEventDto,
     FilterAppliedEventDto,
     FormSubmitEventDto,
@@ -14,7 +14,7 @@ from src.dto.dataclass_events import (
     UserLoginEventDto,
     UserRegisteredEventDto,
 )
-from src.dto.events import (
+from src.endpoints.models.events import (
     ElementClickEvent,
     FilterAppliedEvent,
     FormSubmitEvent,
@@ -26,7 +26,7 @@ from src.dto.events import (
     UserLoginEvent,
     UserRegisteredEvent,
 )
-from src.dto.responses import SuccessResponse
+from src.endpoints.models.responses import SuccessResponse
 from src.services.event_service import EventService
 
 router = APIRouter(prefix="/events", tags=["events"])
