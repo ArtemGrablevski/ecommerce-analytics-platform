@@ -254,15 +254,28 @@
     },
     {
       "id": 12,
-      "title": "User Events Distribution",
-      "type": "piechart",
+      "title": "Cart Abandonment Rate",
+      "type": "stat",
       "targets": [
         {
           "datasource": "ClickHouse-API",
-          "rawSql": "SELECT event_type, count() as count FROM analytics.user_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY GROUP BY event_type"
+          "rawSql": "WITH cart_users AS (SELECT uniq(user_id) as users FROM analytics.interaction_events_mv WHERE event_type = 'item_added_to_cart' AND timestamp >= today() - INTERVAL 7 DAY), purchase_users AS (SELECT uniq(user_id) as users FROM analytics.transaction_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY) SELECT round((1 - purchase_users.users / cart_users.users) * 100, 2) FROM cart_users, purchase_users"
         }
       ],
-      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 24}
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 24},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "unit": "percent",
+          "thresholds": {
+            "steps": [
+              {"color": "green", "value": 0},
+              {"color": "yellow", "value": 60},
+              {"color": "red", "value": 80}
+            ]
+          }
+        }
+      }
     },
     {
       "id": 13,
@@ -278,15 +291,21 @@
     },
     {
       "id": 14,
-      "title": "Hourly Activity Heatmap",
-      "type": "heatmap",
+      "title": "User Journey Funnel",
+      "type": "timeseries",
       "targets": [
         {
           "datasource": "ClickHouse-API",
-          "rawSql": "SELECT toHour(timestamp) as hour, toDayOfWeek(timestamp) as day_of_week, count() as activity FROM analytics.user_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY GROUP BY hour, day_of_week ORDER BY day_of_week, hour"
+          "rawSql": "SELECT toDate(timestamp) as time, uniq(case when event_type = 'page_view' then user_id end) as page_views, uniq(case when event_type = 'item_added_to_cart' then user_id end) as cart_additions, uniq(case when event_type = 'search' then user_id end) as searches FROM analytics.interaction_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY GROUP BY time ORDER BY time"
         }
       ],
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32}
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "unit": "users"
+        }
+      }
     },
     {
       "id": 15,
@@ -335,6 +354,153 @@
         }
       ],
       "gridPos": {"h": 8, "w": 8, "x": 16, "y": 40}
+    },
+    {
+      "id": 19,
+      "title": "Conversion Rate (Cart to Purchase)",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT round((SELECT count() FROM analytics.transaction_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY) * 100.0 / (SELECT uniq(user_id) FROM analytics.interaction_events_mv WHERE event_type = 'item_added_to_cart' AND timestamp >= today() - INTERVAL 7 DAY), 2) as conversion_rate"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 0, "y": 48},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "unit": "percent",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 3},
+              {"color": "green", "value": 7}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 20,
+      "title": "User Engagement Score",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT round(count() * 1.0 / uniq(user_id), 2) as engagement FROM analytics.interaction_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 6, "y": 48},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "unit": "short",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 5},
+              {"color": "green", "value": 15}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 21,
+      "title": "Most Active Event Type",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT event_type FROM analytics.interaction_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY GROUP BY event_type ORDER BY count() DESC LIMIT 1"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 12, "y": 48},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "unit": "string"
+        }
+      }
+    },
+    {
+      "id": 22,
+      "title": "Total Page Views",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT count() FROM analytics.interaction_events_mv WHERE event_type = 'page_view' AND timestamp >= today() - INTERVAL 7 DAY"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 18, "y": 48},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "unit": "views",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 100},
+              {"color": "green", "value": 500}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 23,
+      "title": "Top Performing Products",
+      "type": "table",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT item_id as product_id, count() as cart_additions, uniq(user_id) as unique_users FROM analytics.interaction_events_mv WHERE event_type = 'item_added_to_cart' AND timestamp >= today() - INTERVAL 7 DAY GROUP BY item_id ORDER BY count() DESC LIMIT 10"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 56}
+    },
+    {
+      "id": 24,
+      "title": "Activity by Hour",
+      "type": "table",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT toHour(timestamp) as hour, count() as events FROM analytics.interaction_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY GROUP BY toHour(timestamp) ORDER BY toHour(timestamp)"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 56}
+    },
+    {
+      "id": 25,
+      "title": "Event Type Distribution",
+      "type": "piechart",
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT event_type, count() as value FROM analytics.interaction_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY GROUP BY event_type ORDER BY count() DESC"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 64}
+    },
+    {
+      "id": 26,
+      "title": "Daily Activity Trend",
+      "type": "timeseries", 
+      "targets": [
+        {
+          "datasource": "ClickHouse-API",
+          "rawSql": "SELECT toDate(timestamp) as time, count() as events FROM analytics.interaction_events_mv WHERE timestamp >= today() - INTERVAL 7 DAY GROUP BY toDate(timestamp) ORDER BY toDate(timestamp)"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 64},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "unit": "events"
+        }
+      }
     }
   ],
   "time": {"from": "now-30d", "to": "now"},

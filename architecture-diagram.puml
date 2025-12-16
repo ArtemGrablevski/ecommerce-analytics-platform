@@ -1,0 +1,89 @@
+@startuml Analytics Platform Architecture
+
+package "Analytics Platform" {
+
+    component "FastAPI Backend" as backend {
+        package "Event Service" as eventService
+        package "Kafka Producer" as kafkaProducer
+        package "REST Endpoints" as endpoints
+    }
+
+    package "Apache Kafka" {
+        queue "user_events" as userTopic
+        queue "transaction_events" as transactionTopic  
+        queue "interaction_events" as interactionTopic
+    }
+
+    package "ClickHouse Database" {
+        database "analytics" as db {
+            
+            package "Kafka Engine Tables" as kafkaTables {
+                component "user_events" as userKafkaTable
+                component "transaction_events" as transactionKafkaTable
+                component "interaction_events" as interactionKafkaTable
+            }
+            
+            package "MergeTree Storage Tables" as storageTables {
+                component "user_events_storage" as userStorageTable
+                component "transaction_events_storage" as transactionStorageTable
+                component "interaction_events_storage" as interactionStorageTable
+            }
+            
+            package "Materialized Views" as materializedViews {
+                component "user_events_consumer_mv" as userConsumer
+                component "transaction_events_consumer_mv" as transactionConsumer
+                component "interaction_events_consumer_mv" as interactionConsumer
+            }
+        }
+    }
+
+    component "Grafana" as grafana {
+        package "Analytics Dashboard" as dashboard
+        package "ClickHouse Data Source" as dataSource
+    }
+
+    component "Docker Compose" as docker {
+        package "Service Orchestration" as orchestration
+        package "Volume Persistence" as volumes
+    }
+}
+
+' Event flow
+endpoints --> eventService : User Events
+eventService --> kafkaProducer : Process Events
+
+' Kafka topics
+kafkaProducer --> userTopic : user_registered, user_login
+kafkaProducer --> transactionTopic : transaction
+kafkaProducer --> interactionTopic : element_click, search,\npage_view, form_submit,\nitem_added_to_cart,\nitem_removed_from_cart,\nfilter_applied
+
+' Kafka to ClickHouse automatic consumption
+userTopic --> userKafkaTable : Auto Consume
+transactionTopic --> transactionKafkaTable : Auto Consume
+interactionTopic --> interactionKafkaTable : Auto Consume
+
+' Materialized views transformation
+userKafkaTable --> userConsumer : Transform Data
+transactionKafkaTable --> transactionConsumer : Transform Data
+interactionKafkaTable --> interactionConsumer : Transform Data
+
+userConsumer --> userStorageTable : Store
+transactionConsumer --> transactionStorageTable : Store
+interactionConsumer --> interactionStorageTable : Store
+
+' Grafana visualization
+dataSource --> userStorageTable : Query Data
+dataSource --> transactionStorageTable : Query Data
+dataSource --> interactionStorageTable : Query Data
+dataSource --> dashboard : Visualize
+grafana --> dataSource : Connect
+
+' Infrastructure
+docker --> backend : Container
+docker --> "Apache Kafka" : Container
+docker --> "ClickHouse Database" : Container
+docker --> grafana : Container
+volumes --> db : Data Persistence
+
+
+@enduml
