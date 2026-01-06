@@ -67,7 +67,7 @@ SETTINGS
 echo "Creating MergeTree storage tables..."
 
 curl -X POST "$CLICKHOUSE_URL"  -d "
-CREATE TABLE IF NOT EXISTS analytics.user_events_mv (
+CREATE TABLE IF NOT EXISTS analytics.user_events_storage (
     event_type String,
     user_id String,
     timestamp DateTime64(3)
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS analytics.user_events_mv (
 ORDER BY (timestamp, user_id)"
 
 curl -X POST "$CLICKHOUSE_URL"  -d "
-CREATE TABLE IF NOT EXISTS analytics.transaction_events_mv (
+CREATE TABLE IF NOT EXISTS analytics.transaction_events_storage (
     event_type String,
     user_id String,
     transaction_id String,
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS analytics.transaction_events_mv (
 ORDER BY (timestamp, user_id)"
 
 curl -X POST "$CLICKHOUSE_URL"  -d "
-CREATE TABLE IF NOT EXISTS analytics.interaction_events_mv (
+CREATE TABLE IF NOT EXISTS analytics.interaction_events_storage (
     event_type String,
     user_id String,
     element_name Nullable(String),
@@ -100,18 +100,18 @@ CREATE TABLE IF NOT EXISTS analytics.interaction_events_mv (
 ) ENGINE = MergeTree()
 ORDER BY (timestamp, user_id, event_type)"
 
-echo "Creating materialized views..."
+echo "Creating materialized views from Kafka to Storage tables..."
 
 curl -X POST "$CLICKHOUSE_URL"  -d "
-CREATE MATERIALIZED VIEW IF NOT EXISTS analytics.user_events_consumer TO analytics.user_events_mv AS
+CREATE MATERIALIZED VIEW IF NOT EXISTS analytics.user_events_consumer TO analytics.user_events_storage AS
 SELECT event_type, user_id, parseDateTimeBestEffort(timestamp) as timestamp FROM analytics.user_events"
 
 curl -X POST "$CLICKHOUSE_URL"  -d "
-CREATE MATERIALIZED VIEW IF NOT EXISTS analytics.transaction_events_consumer TO analytics.transaction_events_mv AS
+CREATE MATERIALIZED VIEW IF NOT EXISTS analytics.transaction_events_consumer TO analytics.transaction_events_storage AS
 SELECT event_type, user_id, transaction_id, amount, currency, parseDateTimeBestEffort(timestamp) as timestamp FROM analytics.transaction_events"
 
 curl -X POST "$CLICKHOUSE_URL"  -d "
-CREATE MATERIALIZED VIEW IF NOT EXISTS analytics.interaction_events_consumer TO analytics.interaction_events_mv AS
+CREATE MATERIALIZED VIEW IF NOT EXISTS analytics.interaction_events_consumer TO analytics.interaction_events_storage AS
 SELECT event_type, user_id, element_name, page, query, form_name, item_id, filter_name, filter_value, parseDateTimeBestEffort(timestamp) as timestamp FROM analytics.interaction_events"
 
 echo "ClickHouse setup completed!"

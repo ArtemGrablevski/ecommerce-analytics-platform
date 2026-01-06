@@ -1,9 +1,8 @@
 import asyncio
 import logging
-from typing import List
 
 from kafka.admin import KafkaAdminClient, NewTopic
-from kafka.errors import TopicAlreadyExistsError, NoBrokersAvailable
+from kafka.errors import NoBrokersAvailable, TopicAlreadyExistsError
 
 from src.enums import KafkaTopic
 
@@ -23,7 +22,7 @@ class KafkaAdminService:
         return self.admin_client
 
     async def ensure_topics_exist(self) -> None:
-        topics_to_create: List[NewTopic] = []
+        topics_to_create: list[NewTopic] = []
 
         for topic_enum in KafkaTopic:
             topic_name = topic_enum.value

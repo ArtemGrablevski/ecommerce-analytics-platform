@@ -2,7 +2,6 @@ from abc import ABC
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional
 
 
 @dataclass
@@ -31,7 +30,7 @@ class TransactionEventDto(BaseEvent):
 @dataclass
 class ElementClickEventDto(BaseEvent):
     element_name: str
-    page: Optional[str] = None
+    page: str | None = None
 
 
 @dataclass

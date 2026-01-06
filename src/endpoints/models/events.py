@@ -1,6 +1,5 @@
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional
 
 from pydantic import BaseModel
 
@@ -26,7 +25,7 @@ class TransactionEvent(BaseModel):
 class ElementClickEvent(BaseModel):
     user_id: str
     element_name: str
-    page: Optional[str] = None
+    page: str | None = None
     timestamp: datetime
 
 
