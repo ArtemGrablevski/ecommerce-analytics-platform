@@ -15,12 +15,12 @@ const DataTable: React.FC<DataTableProps> = ({ title, data, columns }) => {
   }));
 
   return (
-    <Card sx={{ minWidth: 400, minHeight: 400 }}>
-      <CardContent>
+    <Card sx={{ minWidth: 400, minHeight: 480 }}>
+      <CardContent sx={{ p: 3 }}>
         <Typography variant="h6" component="div" gutterBottom>
           {title}
         </Typography>
-        <div style={{ height: 350, width: '100%' }}>
+        <div style={{ height: 410, width: '100%' }}>
           <DataGrid
             rows={rows}
             columns={columns}
@@ -31,6 +31,20 @@ const DataTable: React.FC<DataTableProps> = ({ title, data, columns }) => {
               },
             }}
             disableRowSelectionOnClick
+            autoHeight={false}
+            hideFooter={rows.length <= 5}
+            sx={{
+              '& .MuiDataGrid-columnHeaders': {
+                backgroundColor: '#f8fafc',
+                borderBottom: '1px solid #e2e8f0',
+              },
+              '& .MuiDataGrid-cell': {
+                borderBottom: '1px solid #f1f5f9',
+              },
+              '& .MuiDataGrid-row:hover': {
+                backgroundColor: '#f8fafc',
+              }
+            }}
           />
         </div>
       </CardContent>

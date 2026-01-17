@@ -87,41 +87,41 @@ const ComprehensiveDashboard: React.FC = () => {
   };
 
   const topPagesColumns: GridColDef[] = [
-    { field: 'page', headerName: 'Page', width: 200 },
-    { field: 'views', headerName: 'Views', width: 100, type: 'number' },
+    { field: 'page', headerName: 'Page', flex: 1, minWidth: 120 },
+    { field: 'views', headerName: 'Views', flex: 0.5, minWidth: 80, type: 'number' },
   ];
 
   const searchColumns: GridColDef[] = [
-    { field: 'query', headerName: 'Search Query', width: 200 },
-    { field: 'search_count', headerName: 'Count', width: 100, type: 'number' },
+    { field: 'query', headerName: 'Search query', flex: 1, minWidth: 120 },
+    { field: 'search_count', headerName: 'Count', flex: 0.5, minWidth: 80, type: 'number' },
   ];
 
   const clickedElementsColumns: GridColDef[] = [
-    { field: 'element_name', headerName: 'Element', width: 200 },
-    { field: 'clicks', headerName: 'Clicks', width: 100, type: 'number' },
+    { field: 'element_name', headerName: 'Element', flex: 1, minWidth: 120 },
+    { field: 'clicks', headerName: 'Clicks', flex: 0.5, minWidth: 80, type: 'number' },
   ];
 
   const filterUsageColumns: GridColDef[] = [
-    { field: 'filter_name', headerName: 'Filter Name', width: 150 },
-    { field: 'filter_value', headerName: 'Filter Value', width: 150 },
-    { field: 'usage_count', headerName: 'Usage', width: 100, type: 'number' },
+    { field: 'filter_name', headerName: 'Filter name', flex: 1, minWidth: 100 },
+    { field: 'filter_value', headerName: 'Filter value', flex: 1, minWidth: 100 },
+    { field: 'usage_count', headerName: 'Usage', flex: 0.7, minWidth: 80, type: 'number' },
   ];
 
   const productsColumns: GridColDef[] = [
-    { field: 'product_id', headerName: 'Product ID', width: 120 },
-    { field: 'cart_additions', headerName: 'Cart Adds', width: 100, type: 'number' },
-    { field: 'unique_users', headerName: 'Unique Users', width: 120, type: 'number' },
+    { field: 'product_id', headerName: 'Product ID', flex: 1, minWidth: 100 },
+    { field: 'cart_additions', headerName: 'Cart adds', flex: 0.8, minWidth: 80, type: 'number' },
+    { field: 'unique_users', headerName: 'Unique users', flex: 0.8, minWidth: 80, type: 'number' },
   ];
 
   const activityColumns: GridColDef[] = [
-    { field: 'hour', headerName: 'Hour', width: 100, type: 'number' },
-    { field: 'events', headerName: 'Events', width: 100, type: 'number' },
+    { field: 'hour', headerName: 'Hour', flex: 1, minWidth: 80, type: 'number' },
+    { field: 'events', headerName: 'Events', flex: 1, minWidth: 80, type: 'number' },
   ];
 
   const currencyColumns: GridColDef[] = [
-    { field: 'currency', headerName: 'Currency', width: 120 },
-    { field: 'transactions', headerName: 'Transactions', width: 120, type: 'number' },
-    { field: 'total_amount', headerName: 'Total Amount', width: 150, type: 'number' },
+    { field: 'currency', headerName: 'Currency', flex: 0.8, minWidth: 80 },
+    { field: 'transactions', headerName: 'Transactions', flex: 1, minWidth: 90, type: 'number' },
+    { field: 'total_amount', headerName: 'Total amount', flex: 1, minWidth: 100, type: 'number' },
   ];
 
   return (
@@ -132,7 +132,6 @@ const ComprehensiveDashboard: React.FC = () => {
       pb: 6
     }}>
       <Container maxWidth="xl">
-        {/* Header */}
         <Box sx={{ 
           mb: 6,
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -148,24 +147,9 @@ const ComprehensiveDashboard: React.FC = () => {
         }}>
           <Box sx={{ position: 'relative', zIndex: 1 }}>
             <Typography variant="h3" component="h1" sx={{ fontWeight: 700, mb: 1 }}>
-              Analytics Dashboard
+              Analytics dashboard
             </Typography>
-            <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
-              <Chip 
-                icon={<Timeline />} 
-                label="Live Data" 
-                size="small" 
-                sx={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white' }}
-              />
-              <Chip 
-                icon={<Assessment />} 
-                label="26 Metrics" 
-                size="small" 
-                sx={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white' }}
-              />
-            </Box>
           </Box>
-          {/* Decorative elements */}
           <Box sx={{
             position: 'absolute',
             top: -50,
@@ -198,7 +182,6 @@ const ComprehensiveDashboard: React.FC = () => {
           }} />
         </Box>
 
-        {/* KPI Cards Section */}
         <Box sx={{ mb: 8, px: { xs: 2, md: 0 } }}>
           <Box sx={{ 
             display: 'flex', 
@@ -217,7 +200,7 @@ const ComprehensiveDashboard: React.FC = () => {
               }}>
                 <People sx={{ color: 'white', fontSize: 24 }} />
               </Box>
-              User Metrics
+              User metrics
             </Typography>
           </Box>
           <Box sx={{ 
@@ -229,12 +212,13 @@ const ComprehensiveDashboard: React.FC = () => {
               height: '100%',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               color: 'white',
+              borderRadius: 4,
               transition: 'transform 0.2s',
               '&:hover': { transform: 'translateY(-4px)' }
             }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                  <Typography variant="body2" sx={{ opacity: 0.9 }}>Daily Active Users</Typography>
+                  <Typography variant="body2" sx={{ opacity: 0.9 }}>Daily active users</Typography>
                   <People sx={{ opacity: 0.9 }} />
                 </Box>
                 <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
@@ -247,12 +231,13 @@ const ComprehensiveDashboard: React.FC = () => {
               height: '100%',
               background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
               color: 'white',
+              borderRadius: 4,
               transition: 'transform 0.2s',
               '&:hover': { transform: 'translateY(-4px)' }
             }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                  <Typography variant="body2" sx={{ opacity: 0.9 }}>Weekly Active Users</Typography>
+                  <Typography variant="body2" sx={{ opacity: 0.9 }}>Weekly active users</Typography>
                   <Timeline sx={{ opacity: 0.9 }} />
                 </Box>
                 <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
@@ -265,12 +250,13 @@ const ComprehensiveDashboard: React.FC = () => {
               height: '100%',
               background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
               color: 'white',
+              borderRadius: 4,
               transition: 'transform 0.2s',
               '&:hover': { transform: 'translateY(-4px)' }
             }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                  <Typography variant="body2" sx={{ opacity: 0.9 }}>Monthly Active Users</Typography>
+                  <Typography variant="body2" sx={{ opacity: 0.9 }}>Monthly active users</Typography>
                   <Assessment sx={{ opacity: 0.9 }} />
                 </Box>
                 <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
@@ -283,12 +269,13 @@ const ComprehensiveDashboard: React.FC = () => {
               height: '100%',
               background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
               color: 'white',
+              borderRadius: 4,
               transition: 'transform 0.2s',
               '&:hover': { transform: 'translateY(-4px)' }
             }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                  <Typography variant="body2" sx={{ opacity: 0.9 }}>New Registrations</Typography>
+                  <Typography variant="body2" sx={{ opacity: 0.9 }}>New registrations</Typography>
                   <TrendingUp sx={{ opacity: 0.9 }} />
                 </Box>
                 <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
@@ -300,7 +287,6 @@ const ComprehensiveDashboard: React.FC = () => {
           </Box>
         </Box>
 
-        {/* Revenue Metrics Section */}
         <Box sx={{ mb: 8, px: { xs: 2, md: 0 } }}>
           <Box sx={{ 
             display: 'flex', 
@@ -319,7 +305,7 @@ const ComprehensiveDashboard: React.FC = () => {
               }}>
                 <AttachMoney sx={{ color: 'white', fontSize: 24 }} />
               </Box>
-              Revenue Metrics
+              Revenue metrics
             </Typography>
           </Box>
           <Box sx={{ 
@@ -466,7 +452,6 @@ const ComprehensiveDashboard: React.FC = () => {
           </Box>
         </Box>
 
-        {/* Charts Section */}
         <Box sx={{ mb: 8, px: { xs: 2, md: 0 } }}>
           <Box sx={{ 
             display: 'flex', 
@@ -485,7 +470,7 @@ const ComprehensiveDashboard: React.FC = () => {
               }}>
                 <Timeline sx={{ color: 'white', fontSize: 24 }} />
               </Box>
-              Trends & Analysis
+              Trends & analysis
             </Typography>
           </Box>
           <Box sx={{ 
@@ -494,7 +479,7 @@ const ComprehensiveDashboard: React.FC = () => {
             gap: 3
           }}>
             <Card sx={{ 
-              height: 400,
+              minHeight: 480,
               border: 'none',
               borderRadius: 3,
               background: 'rgba(255, 255, 255, 0.9)',
@@ -506,7 +491,7 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
+              <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
                   Revenue Trend (30 days)
                 </Typography>
@@ -520,7 +505,7 @@ const ComprehensiveDashboard: React.FC = () => {
               </CardContent>
             </Card>
             <Card sx={{ 
-              height: 400,
+              minHeight: 480,
               border: 'none',
               borderRadius: 3,
               background: 'rgba(255, 255, 255, 0.9)',
@@ -532,7 +517,7 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
+              <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
                   User Activity Trend (30 days)
                 </Typography>
@@ -546,7 +531,7 @@ const ComprehensiveDashboard: React.FC = () => {
               </CardContent>
             </Card>
             <Card sx={{ 
-              height: 400,
+              minHeight: 480,
               border: 'none',
               borderRadius: 3,
               background: 'rgba(255, 255, 255, 0.9)',
@@ -558,7 +543,7 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
+              <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
                   Registration Trend
                 </Typography>
@@ -572,7 +557,7 @@ const ComprehensiveDashboard: React.FC = () => {
               </CardContent>
             </Card>
             <Card sx={{ 
-              height: 400,
+              minHeight: 480,
               border: 'none',
               borderRadius: 3,
               background: 'rgba(255, 255, 255, 0.9)',
@@ -584,7 +569,7 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
+              <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
                   Daily Activity Trend
                 </Typography>
@@ -600,7 +585,6 @@ const ComprehensiveDashboard: React.FC = () => {
           </Box>
         </Box>
 
-        {/* Funnel & Conversion Section */}
         <Box sx={{ mb: 8, px: { xs: 2, md: 0 } }}>
           <Box sx={{ 
             display: 'flex', 
@@ -619,7 +603,7 @@ const ComprehensiveDashboard: React.FC = () => {
               }}>
                 <ShoppingCart sx={{ color: 'white', fontSize: 24 }} />
               </Box>
-              User Journey & Conversion
+              User journey & conversion
             </Typography>
           </Box>
           <Box sx={{ 
@@ -628,7 +612,7 @@ const ComprehensiveDashboard: React.FC = () => {
             gap: 3
           }}>
             <Card sx={{ 
-              height: 400,
+              height: 450,
               border: 'none',
               borderRadius: 3,
               background: 'rgba(255, 255, 255, 0.9)',
@@ -640,7 +624,7 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
+              <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
                   User Journey Funnel
                 </Typography>
@@ -657,21 +641,21 @@ const ComprehensiveDashboard: React.FC = () => {
                 />
               </CardContent>
             </Card>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, height: '100%' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, height: 450 }}>
               <Card sx={{ 
                 flex: 1,
                 border: '1px solid #fecaca',
-                borderRadius: 2,
+                borderRadius: 3,
                 backgroundColor: '#fef2f2',
                 transition: 'all 0.2s',
                 '&:hover': { transform: 'translateY(-2px)' }
               }}>
-                <CardContent>
+                <CardContent sx={{ p: 4 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                    <Typography variant="body2" color="text.secondary">Cart Abandonment</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9rem' }}>Cart abandonment</Typography>
                     <TrendingDown sx={{ color: '#dc2626', fontSize: 20 }} />
                   </Box>
-                  <Typography variant="h4" sx={{ fontWeight: 700, color: '#dc2626', mb: 1 }}>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: '#dc2626', mb: 2 }}>
                     {formatPercentage(getMetricValue('cart_abandonment_rate'))}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">Carts not converted</Typography>
@@ -680,17 +664,17 @@ const ComprehensiveDashboard: React.FC = () => {
               <Card sx={{ 
                 flex: 1,
                 border: '1px solid #bbf7d0',
-                borderRadius: 2,
+                borderRadius: 3,
                 backgroundColor: '#f0fdf4',
                 transition: 'all 0.2s',
                 '&:hover': { transform: 'translateY(-2px)' }
               }}>
-                <CardContent>
+                <CardContent sx={{ p: 4 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                    <Typography variant="body2" color="text.secondary">Conversion Rate</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9rem' }}>Conversion rate</Typography>
                     <TrendingUp sx={{ color: '#16a34a', fontSize: 20 }} />
                   </Box>
-                  <Typography variant="h4" sx={{ fontWeight: 700, color: '#16a34a', mb: 1 }}>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: '#16a34a', mb: 2 }}>
                     {formatPercentage(getMetricValue('conversion_rate_cart_to_purchase'))}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">Cart to purchase</Typography>
@@ -699,17 +683,17 @@ const ComprehensiveDashboard: React.FC = () => {
               <Card sx={{ 
                 flex: 1,
                 border: '1px solid #c7d2fe',
-                borderRadius: 2,
+                borderRadius: 3,
                 backgroundColor: '#f0f4ff',
                 transition: 'all 0.2s',
                 '&:hover': { transform: 'translateY(-2px)' }
               }}>
-                <CardContent>
+                <CardContent sx={{ p: 4 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                    <Typography variant="body2" color="text.secondary">Engagement Score</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9rem' }}>Engagement score</Typography>
                     <Visibility sx={{ color: '#4f46e5', fontSize: 20 }} />
                   </Box>
-                  <Typography variant="h4" sx={{ fontWeight: 700, color: '#4f46e5', mb: 1 }}>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: '#4f46e5', mb: 2 }}>
                     {formatNumber(getMetricValue('user_engagement_score'))}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">Events per user</Typography>
@@ -719,7 +703,6 @@ const ComprehensiveDashboard: React.FC = () => {
           </Box>
         </Box>
 
-        {/* Content Analytics Section */}
         <Box sx={{ mb: 8, px: { xs: 2, md: 0 } }}>
           <Box sx={{ 
             display: 'flex', 
@@ -738,7 +721,7 @@ const ComprehensiveDashboard: React.FC = () => {
               }}>
                 <Visibility sx={{ color: 'white', fontSize: 24 }} />
               </Box>
-              Content & Interaction Analytics
+              Content & interaction analytics
             </Typography>
           </Box>
           <Box sx={{ 
@@ -747,7 +730,7 @@ const ComprehensiveDashboard: React.FC = () => {
             gap: 3
           }}>
             <Card sx={{ 
-              height: 400,
+              minHeight: 480,
               border: 'none',
               borderRadius: 3,
               background: 'rgba(255, 255, 255, 0.9)',
@@ -759,7 +742,7 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
+              <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
                   Top Pages by Views
                 </Typography>
@@ -771,7 +754,7 @@ const ComprehensiveDashboard: React.FC = () => {
               </CardContent>
             </Card>
             <Card sx={{ 
-              height: 400,
+              minHeight: 480,
               border: 'none',
               borderRadius: 3,
               background: 'rgba(255, 255, 255, 0.9)',
@@ -783,7 +766,7 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
+              <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
                   Search Queries
                 </Typography>
@@ -795,7 +778,7 @@ const ComprehensiveDashboard: React.FC = () => {
               </CardContent>
             </Card>
             <Card sx={{ 
-              height: 400,
+              minHeight: 480,
               border: 'none',
               borderRadius: 3,
               background: 'rgba(255, 255, 255, 0.9)',
@@ -807,9 +790,9 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
-                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
-                  Event Type Distribution
+              <CardContent sx={{ p: 3 }}>
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 3, color: '#334155' }}>
+                  Event type distribution
                 </Typography>
                 <PieChartCard
                   title=""
@@ -820,7 +803,7 @@ const ComprehensiveDashboard: React.FC = () => {
               </CardContent>
             </Card>
             <Card sx={{ 
-              height: 400,
+              minHeight: 480,
               gridColumn: { lg: 'span 2' },
               border: 'none',
               borderRadius: 3,
@@ -833,7 +816,7 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
+              <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
                   Most Clicked Elements
                 </Typography>
@@ -845,7 +828,7 @@ const ComprehensiveDashboard: React.FC = () => {
               </CardContent>
             </Card>
             <Card sx={{ 
-              height: 400,
+              minHeight: 480,
               border: 'none',
               borderRadius: 3,
               background: 'rgba(255, 255, 255, 0.9)',
@@ -857,7 +840,7 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
+              <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
                   Activity by Hour
                 </Typography>
@@ -871,7 +854,6 @@ const ComprehensiveDashboard: React.FC = () => {
           </Box>
         </Box>
 
-        {/* Business Insights Section */}
         <Box sx={{ mb: 8, px: { xs: 2, md: 0 } }}>
           <Box sx={{ 
             display: 'flex', 
@@ -890,7 +872,7 @@ const ComprehensiveDashboard: React.FC = () => {
               }}>
                 <Assessment sx={{ color: 'white', fontSize: 24 }} />
               </Box>
-              Business Insights
+              Business insights
             </Typography>
           </Box>
           <Box sx={{ 
@@ -899,7 +881,7 @@ const ComprehensiveDashboard: React.FC = () => {
             gap: 3
           }}>
             <Card sx={{ 
-              height: 400,
+              minHeight: 480,
               border: 'none',
               borderRadius: 3,
               background: 'rgba(255, 255, 255, 0.9)',
@@ -911,7 +893,7 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
+              <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
                   Top Performing Products
                 </Typography>
@@ -923,7 +905,7 @@ const ComprehensiveDashboard: React.FC = () => {
               </CardContent>
             </Card>
             <Card sx={{ 
-              height: 400,
+              minHeight: 480,
               border: 'none',
               borderRadius: 3,
               background: 'rgba(255, 255, 255, 0.9)',
@@ -935,7 +917,7 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
+              <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
                   Filter Usage
                 </Typography>
@@ -947,7 +929,7 @@ const ComprehensiveDashboard: React.FC = () => {
               </CardContent>
             </Card>
             <Card sx={{ 
-              height: 400,
+              minHeight: 480,
               border: 'none',
               borderRadius: 3,
               background: 'rgba(255, 255, 255, 0.9)',
@@ -959,7 +941,7 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
+              <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
                   Currency Transactions
                 </Typography>
@@ -973,7 +955,7 @@ const ComprehensiveDashboard: React.FC = () => {
               </CardContent>
             </Card>
             <Card sx={{ 
-              height: 400,
+              minHeight: 480,
               gridColumn: { lg: 'span 2' },
               border: 'none',
               borderRadius: 3,
@@ -986,7 +968,7 @@ const ComprehensiveDashboard: React.FC = () => {
                 transform: 'translateY(-4px)'
               }
             }}>
-              <CardContent sx={{ height: '100%', p: 3 }}>
+              <CardContent sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#334155' }}>
                   Transaction Volume by Currency
                 </Typography>
