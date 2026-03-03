@@ -367,6 +367,6 @@ class ClickHouseRepository(ClickHouseRepositoryInterface):
                 FROM interaction_events_storage
                 WHERE timestamp >= now() - INTERVAL 7 DAY
                 GROUP BY toDate(timestamp) ORDER BY toDate(timestamp)
-            """
+            """,
         }
         return queries[metric_type]

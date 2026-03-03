@@ -136,48 +136,80 @@ const ComprehensiveDashboard: React.FC = () => {
           mb: 6,
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           borderRadius: 0,
-          borderBottomLeftRadius: 24,
-          borderBottomRightRadius: 24,
+          borderBottomLeftRadius: 32,
+          borderBottomRightRadius: 32,
           p: { xs: 3, md: 6 },
-          pt: { xs: 4, md: 8 },
+          pt: { xs: 6, md: 10 },
+          pb: { xs: 6, md: 8 },
           color: 'white',
           position: 'relative',
           overflow: 'hidden',
-          boxShadow: '0 20px 40px rgba(102, 126, 234, 0.3)'
+          boxShadow: '0 32px 64px rgba(102, 126, 234, 0.4)',
+          border: '1px solid rgba(255, 255, 255, 0.1)'
         }}>
           <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <Typography variant="h3" component="h1" sx={{ fontWeight: 700, mb: 1 }}>
+            <Typography variant="h2" component="h1" sx={{ 
+              fontWeight: 800, 
+              mb: 2,
+              fontSize: { xs: '2.5rem', md: '3.5rem' },
+              background: 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+              textShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            }}>
               Analytics dashboard
+            </Typography>
+            <Typography variant="h6" sx={{ 
+              opacity: 0.9, 
+              fontWeight: 400,
+              mb: 2,
+              color: 'rgba(255, 255, 255, 0.8)'
+            }}>
+              Analytics and business intelligence
             </Typography>
           </Box>
           <Box sx={{
             position: 'absolute',
-            top: -50,
-            right: -50,
-            width: 300,
-            height: 300,
+            top: -60,
+            right: -60,
+            width: 400,
+            height: 400,
             borderRadius: '50%',
-            background: 'rgba(255,255,255,0.1)',
+            background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 50%, transparent 100%)',
+            filter: 'blur(2px)',
             zIndex: 0
           }} />
           <Box sx={{
             position: 'absolute',
-            bottom: -30,
-            left: -30,
-            width: 150,
-            height: 150,
+            bottom: -40,
+            left: -40,
+            width: 200,
+            height: 200,
             borderRadius: '50%',
-            background: 'rgba(255,255,255,0.05)',
+            background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)',
+            filter: 'blur(1px)',
             zIndex: 0
           }} />
           <Box sx={{
             position: 'absolute',
-            top: '20%',
-            right: '20%',
-            width: 60,
-            height: 60,
+            top: '15%',
+            right: '25%',
+            width: 100,
+            height: 100,
             borderRadius: '50%',
-            background: 'rgba(255,255,255,0.15)',
+            background: 'radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 60%)',
+            filter: 'blur(1.5px)',
+            zIndex: 0
+          }} />
+          <Box sx={{
+            position: 'absolute',
+            top: '60%',
+            left: '10%',
+            width: 80,
+            height: 80,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%)',
             zIndex: 0
           }} />
         </Box>
@@ -191,14 +223,25 @@ const ComprehensiveDashboard: React.FC = () => {
             pb: 2,
             borderBottom: '1px solid #e2e8f0'
           }}>
-            <Typography variant="h4" sx={{ fontWeight: 600, color: '#1e293b', display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Typography variant="h4" sx={{ 
+              fontWeight: 700, 
+              background: 'linear-gradient(135deg, #1e293b 0%, #475569 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 2,
+              textShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            }}>
               <Box sx={{
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 borderRadius: '50%',
-                p: 1,
-                display: 'flex'
+                p: 1.5,
+                display: 'flex',
+                boxShadow: '0 8px 20px rgba(102, 126, 234, 0.3)'
               }}>
-                <People sx={{ color: 'white', fontSize: 24 }} />
+                <People sx={{ color: 'white', fontSize: 28 }} />
               </Box>
               User metrics
             </Typography>
@@ -213,8 +256,13 @@ const ComprehensiveDashboard: React.FC = () => {
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               color: 'white',
               borderRadius: 4,
-              transition: 'transform 0.2s',
-              '&:hover': { transform: 'translateY(-4px)' }
+              boxShadow: '0 10px 40px rgba(102, 126, 234, 0.3)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+              '&:hover': { 
+                transform: 'translateY(-8px) scale(1.02)',
+                boxShadow: '0 20px 60px rgba(102, 126, 234, 0.4)'
+              }
             }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -232,8 +280,13 @@ const ComprehensiveDashboard: React.FC = () => {
               background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
               color: 'white',
               borderRadius: 4,
-              transition: 'transform 0.2s',
-              '&:hover': { transform: 'translateY(-4px)' }
+              boxShadow: '0 10px 40px rgba(240, 147, 251, 0.3)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+              '&:hover': { 
+                transform: 'translateY(-8px) scale(1.02)',
+                boxShadow: '0 20px 60px rgba(240, 147, 251, 0.4)'
+              }
             }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -251,8 +304,13 @@ const ComprehensiveDashboard: React.FC = () => {
               background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
               color: 'white',
               borderRadius: 4,
-              transition: 'transform 0.2s',
-              '&:hover': { transform: 'translateY(-4px)' }
+              boxShadow: '0 10px 40px rgba(79, 172, 254, 0.3)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+              '&:hover': { 
+                transform: 'translateY(-8px) scale(1.02)',
+                boxShadow: '0 20px 60px rgba(79, 172, 254, 0.4)'
+              }
             }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -270,8 +328,13 @@ const ComprehensiveDashboard: React.FC = () => {
               background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
               color: 'white',
               borderRadius: 4,
-              transition: 'transform 0.2s',
-              '&:hover': { transform: 'translateY(-4px)' }
+              boxShadow: '0 10px 40px rgba(250, 112, 154, 0.3)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+              '&:hover': { 
+                transform: 'translateY(-8px) scale(1.02)',
+                boxShadow: '0 20px 60px rgba(250, 112, 154, 0.4)'
+              }
             }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -480,15 +543,16 @@ const ComprehensiveDashboard: React.FC = () => {
           }}>
             <Card sx={{ 
               minHeight: 480,
-              border: 'none',
-              borderRadius: 3,
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              transition: 'all 0.3s ease',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: 4,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.06)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
               '&:hover': { 
-                boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-                transform: 'translateY(-4px)'
+                boxShadow: '0 32px 60px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.08)',
+                transform: 'translateY(-6px) scale(1.01)',
+                border: '1px solid rgba(102, 126, 234, 0.2)'
               }
             }}>
               <CardContent sx={{ p: 3 }}>
@@ -506,15 +570,16 @@ const ComprehensiveDashboard: React.FC = () => {
             </Card>
             <Card sx={{ 
               minHeight: 480,
-              border: 'none',
-              borderRadius: 3,
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              transition: 'all 0.3s ease',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: 4,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.06)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
               '&:hover': { 
-                boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-                transform: 'translateY(-4px)'
+                boxShadow: '0 32px 60px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.08)',
+                transform: 'translateY(-6px) scale(1.01)',
+                border: '1px solid rgba(102, 126, 234, 0.2)'
               }
             }}>
               <CardContent sx={{ p: 3 }}>
@@ -532,15 +597,16 @@ const ComprehensiveDashboard: React.FC = () => {
             </Card>
             <Card sx={{ 
               minHeight: 480,
-              border: 'none',
-              borderRadius: 3,
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              transition: 'all 0.3s ease',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: 4,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.06)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
               '&:hover': { 
-                boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-                transform: 'translateY(-4px)'
+                boxShadow: '0 32px 60px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.08)',
+                transform: 'translateY(-6px) scale(1.01)',
+                border: '1px solid rgba(102, 126, 234, 0.2)'
               }
             }}>
               <CardContent sx={{ p: 3 }}>
@@ -558,15 +624,16 @@ const ComprehensiveDashboard: React.FC = () => {
             </Card>
             <Card sx={{ 
               minHeight: 480,
-              border: 'none',
-              borderRadius: 3,
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              transition: 'all 0.3s ease',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: 4,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.06)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
               '&:hover': { 
-                boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-                transform: 'translateY(-4px)'
+                boxShadow: '0 32px 60px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.08)',
+                transform: 'translateY(-6px) scale(1.01)',
+                border: '1px solid rgba(102, 126, 234, 0.2)'
               }
             }}>
               <CardContent sx={{ p: 3 }}>
@@ -613,15 +680,16 @@ const ComprehensiveDashboard: React.FC = () => {
           }}>
             <Card sx={{ 
               height: 450,
-              border: 'none',
-              borderRadius: 3,
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              transition: 'all 0.3s ease',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: 4,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.06)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
               '&:hover': { 
-                boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-                transform: 'translateY(-4px)'
+                boxShadow: '0 32px 60px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.08)',
+                transform: 'translateY(-6px) scale(1.01)',
+                border: '1px solid rgba(102, 126, 234, 0.2)'
               }
             }}>
               <CardContent sx={{ p: 3 }}>
@@ -731,15 +799,16 @@ const ComprehensiveDashboard: React.FC = () => {
           }}>
             <Card sx={{ 
               minHeight: 480,
-              border: 'none',
-              borderRadius: 3,
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              transition: 'all 0.3s ease',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: 4,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.06)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
               '&:hover': { 
-                boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-                transform: 'translateY(-4px)'
+                boxShadow: '0 32px 60px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.08)',
+                transform: 'translateY(-6px) scale(1.01)',
+                border: '1px solid rgba(102, 126, 234, 0.2)'
               }
             }}>
               <CardContent sx={{ p: 3 }}>
@@ -755,15 +824,16 @@ const ComprehensiveDashboard: React.FC = () => {
             </Card>
             <Card sx={{ 
               minHeight: 480,
-              border: 'none',
-              borderRadius: 3,
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              transition: 'all 0.3s ease',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: 4,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.06)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
               '&:hover': { 
-                boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-                transform: 'translateY(-4px)'
+                boxShadow: '0 32px 60px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.08)',
+                transform: 'translateY(-6px) scale(1.01)',
+                border: '1px solid rgba(102, 126, 234, 0.2)'
               }
             }}>
               <CardContent sx={{ p: 3 }}>
@@ -779,15 +849,16 @@ const ComprehensiveDashboard: React.FC = () => {
             </Card>
             <Card sx={{ 
               minHeight: 480,
-              border: 'none',
-              borderRadius: 3,
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              transition: 'all 0.3s ease',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: 4,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.06)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
               '&:hover': { 
-                boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-                transform: 'translateY(-4px)'
+                boxShadow: '0 32px 60px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.08)',
+                transform: 'translateY(-6px) scale(1.01)',
+                border: '1px solid rgba(102, 126, 234, 0.2)'
               }
             }}>
               <CardContent sx={{ p: 3 }}>
@@ -829,15 +900,16 @@ const ComprehensiveDashboard: React.FC = () => {
             </Card>
             <Card sx={{ 
               minHeight: 480,
-              border: 'none',
-              borderRadius: 3,
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              transition: 'all 0.3s ease',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: 4,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.06)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
               '&:hover': { 
-                boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-                transform: 'translateY(-4px)'
+                boxShadow: '0 32px 60px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.08)',
+                transform: 'translateY(-6px) scale(1.01)',
+                border: '1px solid rgba(102, 126, 234, 0.2)'
               }
             }}>
               <CardContent sx={{ p: 3 }}>
@@ -882,15 +954,16 @@ const ComprehensiveDashboard: React.FC = () => {
           }}>
             <Card sx={{ 
               minHeight: 480,
-              border: 'none',
-              borderRadius: 3,
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              transition: 'all 0.3s ease',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: 4,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.06)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
               '&:hover': { 
-                boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-                transform: 'translateY(-4px)'
+                boxShadow: '0 32px 60px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.08)',
+                transform: 'translateY(-6px) scale(1.01)',
+                border: '1px solid rgba(102, 126, 234, 0.2)'
               }
             }}>
               <CardContent sx={{ p: 3 }}>
@@ -906,15 +979,16 @@ const ComprehensiveDashboard: React.FC = () => {
             </Card>
             <Card sx={{ 
               minHeight: 480,
-              border: 'none',
-              borderRadius: 3,
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              transition: 'all 0.3s ease',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: 4,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.06)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
               '&:hover': { 
-                boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-                transform: 'translateY(-4px)'
+                boxShadow: '0 32px 60px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.08)',
+                transform: 'translateY(-6px) scale(1.01)',
+                border: '1px solid rgba(102, 126, 234, 0.2)'
               }
             }}>
               <CardContent sx={{ p: 3 }}>
@@ -930,15 +1004,16 @@ const ComprehensiveDashboard: React.FC = () => {
             </Card>
             <Card sx={{ 
               minHeight: 480,
-              border: 'none',
-              borderRadius: 3,
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              transition: 'all 0.3s ease',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: 4,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 16px 40px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.06)',
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
               '&:hover': { 
-                boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-                transform: 'translateY(-4px)'
+                boxShadow: '0 32px 60px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.08)',
+                transform: 'translateY(-6px) scale(1.01)',
+                border: '1px solid rgba(102, 126, 234, 0.2)'
               }
             }}>
               <CardContent sx={{ p: 3 }}>

@@ -1,4 +1,3 @@
-import asynch
 from dependency_injector import containers, providers
 
 from src.config import config
