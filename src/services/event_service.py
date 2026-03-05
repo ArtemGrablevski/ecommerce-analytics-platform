@@ -21,7 +21,7 @@ class EventService:
 
     async def process_event(self, event: BaseEvent) -> None:
         timestamp_str = event.timestamp.strftime("%Y-%m-%d %H:%M:%S")
-        event_data = {"user_id": event.user_id, "timestamp": timestamp_str}
+        event_data = {"user_id": event.user_id, "partner_id": event.partner_id, "timestamp": timestamp_str}
 
         match event:
             case UserRegisteredEventDto():

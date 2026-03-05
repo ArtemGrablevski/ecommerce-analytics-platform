@@ -8,6 +8,7 @@ from src.config import config
 from src.di import Container
 from src.endpoints.dashboard import router as dashboard_router
 from src.endpoints.events import router as events_router
+from src.endpoints.partners import router as partners_router
 from src.services.kafka_admin import KafkaAdminService
 
 container = Container()
@@ -50,7 +51,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-container.wire(modules=["src.endpoints.events", "src.endpoints.dashboard"])
+container.wire(modules=["src.endpoints.events", "src.endpoints.dashboard", "src.endpoints.partners"])
 
 app.include_router(events_router)
 app.include_router(dashboard_router)
+app.include_router(partners_router)

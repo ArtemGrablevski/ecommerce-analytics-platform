@@ -160,4 +160,4 @@ ACTIVITY_BY_HOUR, EVENT_TYPE_DISTRIBUTION, DAILY_ACTIVITY_TREND
 - ✅ Dependency Injection для тестируемости
 - ✅ Слоистая архитектура: endpoints -> services -> repositories
 - ✅ match-case вместо длинных if-elif
-- ✅ Async/await архитектура
+- ✅ Async/await в Python

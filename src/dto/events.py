@@ -7,6 +7,7 @@ from decimal import Decimal
 @dataclass
 class BaseEvent(ABC):
     user_id: str
+    partner_id: str
     timestamp: datetime
 
 

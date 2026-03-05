@@ -7,7 +7,10 @@ import {
   Alert,
   Card,
   CardContent,
-  Chip
+  Chip,
+  AppBar,
+  Toolbar,
+  Button
 } from '@mui/material';
 import {
   TrendingUp,
@@ -25,7 +28,11 @@ import ChartCard from './ChartCard';
 import DataTable from './DataTable';
 import PieChartCard from './PieChartCard';
 
-const ComprehensiveDashboard: React.FC = () => {
+interface ComprehensiveDashboardProps {
+  onLogout: () => void;
+}
+
+const ComprehensiveDashboard: React.FC<ComprehensiveDashboardProps> = ({ onLogout }) => {
   const [metrics, setMetrics] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -131,6 +138,17 @@ const ComprehensiveDashboard: React.FC = () => {
       pt: 0,
       pb: 6
     }}>
+      <AppBar position="static" sx={{ mb: 0 }}>
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Partner Dashboard
+          </Typography>
+          <Button color="inherit" onClick={onLogout}>
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
+      
       <Container maxWidth="xl">
         <Box sx={{ 
           mb: 6,

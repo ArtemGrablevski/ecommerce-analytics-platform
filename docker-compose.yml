@@ -68,7 +68,13 @@ services:
         condition: service_healthy
       clickhouse-migrate:
         condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
     restart: on-failure
+    volumes:
+      - ./src:/app/src
+      - ./alembic:/app/alembic
+      - ./alembic.ini:/app/alembic.ini
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       CLICKHOUSE_URL: http://clickhouse:8123
@@ -77,6 +83,27 @@ services:
       CLICKHOUSE_PASSWORD: ""
       CLICKHOUSE_HOST: clickhouse
       CLICKHOUSE_PORT: 9000
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: analytics
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: analytics
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   frontend:
     build: ./frontend
@@ -90,3 +117,4 @@ services:
 
 volumes:
   clickhouse_data:
+  postgres_data:
