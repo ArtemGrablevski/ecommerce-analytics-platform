@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Typography, useTheme } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 interface DataTableProps {
@@ -9,7 +9,12 @@ interface DataTableProps {
 }
 
 const DataTable: React.FC<DataTableProps> = ({ title, data, columns }) => {
-  const rows = data.map((item, index) => ({
+  const theme = useTheme();
+  
+  // Защита от невалидных данных
+  const validData = Array.isArray(data) ? data : [];
+  
+  const rows = validData.map((item, index) => ({
     id: index,
     ...item
   }));
@@ -17,7 +22,16 @@ const DataTable: React.FC<DataTableProps> = ({ title, data, columns }) => {
   return (
     <Card sx={{ minWidth: 400, minHeight: 480 }}>
       <CardContent sx={{ p: 3 }}>
-        <Typography variant="h6" component="div" gutterBottom>
+        <Typography 
+          variant="h6" 
+          component="div" 
+          gutterBottom
+          sx={{ 
+            fontWeight: 600,
+            color: theme.palette.text.primary,
+            mb: 3
+          }}
+        >
           {title}
         </Typography>
         <div style={{ height: 410, width: '100%' }}>
@@ -34,16 +48,60 @@ const DataTable: React.FC<DataTableProps> = ({ title, data, columns }) => {
             autoHeight={false}
             hideFooter={rows.length <= 5}
             sx={{
+              border: 'none',
+              '& .MuiDataGrid-main': {
+                borderRadius: 2,
+              },
               '& .MuiDataGrid-columnHeaders': {
-                backgroundColor: '#f8fafc',
-                borderBottom: '1px solid #e2e8f0',
+                backgroundColor: theme.palette.mode === 'light' ? '#F8FAFC' : '#334155',
+                border: 'none',
+                borderRadius: '12px 12px 0 0',
+                minHeight: '52px !important',
+              },
+              '& .MuiDataGrid-columnHeader': {
+                border: 'none',
+                '& .MuiDataGrid-columnHeaderTitle': {
+                  fontWeight: 600,
+                  fontSize: '0.875rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  color: theme.palette.text.secondary,
+                },
               },
               '& .MuiDataGrid-cell': {
-                borderBottom: '1px solid #f1f5f9',
+                border: 'none',
+                padding: '12px 16px',
+                fontSize: '1rem',
+                color: theme.palette.text.primary,
               },
-              '& .MuiDataGrid-row:hover': {
-                backgroundColor: '#f8fafc',
-              }
+              '& .MuiDataGrid-row': {
+                backgroundColor: theme.palette.background.paper,
+                borderRadius: 0,
+                '&:hover': {
+                  backgroundColor: theme.palette.mode === 'light' 
+                    ? 'rgba(99, 102, 241, 0.04)' 
+                    : 'rgba(99, 102, 241, 0.08)',
+                  transform: 'scale(1.001)',
+                  transition: 'all 0.2s ease',
+                },
+                '&:nth-of-type(even)': {
+                  backgroundColor: theme.palette.mode === 'light' 
+                    ? 'rgba(248, 250, 252, 0.5)' 
+                    : 'rgba(51, 65, 85, 0.3)',
+                },
+              },
+              '& .MuiDataGrid-footerContainer': {
+                border: 'none',
+                borderRadius: '0 0 12px 12px',
+                backgroundColor: theme.palette.mode === 'light' ? '#F8FAFC' : '#334155',
+                minHeight: '48px',
+              },
+              '& .MuiTablePagination-root': {
+                color: theme.palette.text.secondary,
+              },
+              '& .MuiDataGrid-selectedRowCount': {
+                display: 'none',
+              },
             }}
           />
         </div>
