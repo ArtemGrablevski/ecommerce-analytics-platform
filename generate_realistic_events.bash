@@ -2,6 +2,16 @@
 
 BASE_URL="http://localhost:8000/events"
 
+# Prompt for partner secret key
+echo "🔑 Enter partner secret key:"
+read -s PARTNER_SECRET
+echo
+
+if [ -z "$PARTNER_SECRET" ]; then
+    echo "❌ Error: Partner secret key is required"
+    exit 1
+fi
+
 echo "🚀 Generating realistic events across multiple days and hours..."
 
 # Function to generate random timestamp in the last 7 days
@@ -26,6 +36,7 @@ for i in {1..20}; do
     
     curl -s -X POST "$BASE_URL/user-registered" \
         -H "Content-Type: application/json" \
+        -H "X-Partner-Secret: $PARTNER_SECRET" \
         -d "{
             \"user_id\": \"$user_id\",
             \"timestamp\": \"$timestamp\"
@@ -40,6 +51,7 @@ for i in {1..40}; do
     
     curl -s -X POST "$BASE_URL/user-login" \
         -H "Content-Type: application/json" \
+        -H "X-Partner-Secret: $PARTNER_SECRET" \
         -d "{
             \"user_id\": \"$user_id\",
             \"timestamp\": \"$timestamp\"
@@ -58,6 +70,7 @@ for i in {1..25}; do
     
     curl -s -X POST "$BASE_URL/transaction" \
         -H "Content-Type: application/json" \
+        -H "X-Partner-Secret: $PARTNER_SECRET" \
         -d "{
             \"user_id\": \"$user_id\",
             \"transaction_id\": \"txn_$(date +%s)_$i\",
@@ -78,6 +91,7 @@ for i in {1..60}; do
     
     curl -s -X POST "$BASE_URL/page-view" \
         -H "Content-Type: application/json" \
+        -H "X-Partner-Secret: $PARTNER_SECRET" \
         -d "{
             \"user_id\": \"$user_id\",
             \"page\": \"$page\",
@@ -98,6 +112,7 @@ for i in {1..45}; do
     
     curl -s -X POST "$BASE_URL/element-click" \
         -H "Content-Type: application/json" \
+        -H "X-Partner-Secret: $PARTNER_SECRET" \
         -d "{
             \"user_id\": \"$user_id\",
             \"element_name\": \"$element\",
@@ -117,6 +132,7 @@ for i in {1..30}; do
     
     curl -s -X POST "$BASE_URL/search" \
         -H "Content-Type: application/json" \
+        -H "X-Partner-Secret: $PARTNER_SECRET" \
         -d "{
             \"user_id\": \"$user_id\",
             \"query\": \"$query\",
@@ -136,6 +152,7 @@ for i in {1..35}; do
     # Add to cart
     curl -s -X POST "$BASE_URL/item-added-to-cart" \
         -H "Content-Type: application/json" \
+        -H "X-Partner-Secret: $PARTNER_SECRET" \
         -d "{
             \"user_id\": \"$user_id\",
             \"item_id\": \"$product\",
@@ -148,6 +165,7 @@ for i in {1..35}; do
         remove_timestamp=$(generate_random_timestamp)
         curl -s -X POST "$BASE_URL/item-removed-from-cart" \
             -H "Content-Type: application/json" \
+            -H "X-Partner-Secret: $PARTNER_SECRET" \
             -d "{
                 \"user_id\": \"$user_id\",
                 \"item_id\": \"$product\",
@@ -167,6 +185,7 @@ for i in {1..20}; do
     
     curl -s -X POST "$BASE_URL/form-submit" \
         -H "Content-Type: application/json" \
+        -H "X-Partner-Secret: $PARTNER_SECRET" \
         -d "{
             \"user_id\": \"$user_id\",
             \"form_name\": \"$form\",
@@ -189,6 +208,7 @@ for i in {1..25}; do
     
     curl -s -X POST "$BASE_URL/filter-applied" \
         -H "Content-Type: application/json" \
+        -H "X-Partner-Secret: $PARTNER_SECRET" \
         -d "{
             \"user_id\": \"$user_id\",
             \"filter_name\": \"$filter\",

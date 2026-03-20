@@ -82,7 +82,7 @@ const Dashboard: React.FC = () => {
           <MetricCard
             title="Total Users"
             value={formatNumber(getMetricValue('total_users'))}
-            color="#1976d2"
+            gradient="linear-gradient(135deg, #1976d2, #1565c0)"
           />
         </Box>
         
@@ -90,7 +90,7 @@ const Dashboard: React.FC = () => {
           <MetricCard
             title="Total Transactions"
             value={formatNumber(getMetricValue('total_transactions'))}
-            color="#388e3c"
+            gradient="linear-gradient(135deg, #388e3c, #2e7d32)"
           />
         </Box>
         
@@ -98,7 +98,7 @@ const Dashboard: React.FC = () => {
           <MetricCard
             title="Revenue"
             value={formatCurrency(getMetricValue('revenue'))}
-            color="#f57c00"
+            gradient="linear-gradient(135deg, #f57c00, #ef6c00)"
           />
         </Box>
         
@@ -106,7 +106,7 @@ const Dashboard: React.FC = () => {
           <MetricCard
             title="Conversion Rate"
             value={formatPercentage(getMetricValue('conversion_rate'))}
-            color="#7b1fa2"
+            gradient="linear-gradient(135deg, #7b1fa2, #6a1b9a)"
           />
         </Box>
 
@@ -134,7 +134,7 @@ const Dashboard: React.FC = () => {
           <MetricCard
             title="Cart Abandonment Rate"
             value={formatPercentage(getMetricValue('cart_abandonment'))}
-            color="#d32f2f"
+            gradient="linear-gradient(135deg, #d32f2f, #c62828)"
           />
         </Box>
 

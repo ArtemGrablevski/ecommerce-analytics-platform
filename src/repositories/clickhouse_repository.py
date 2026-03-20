@@ -47,7 +47,7 @@ from src.enums import MetricType
 
 class ClickHouseRepositoryInterface(ABC):
     @abstractmethod
-    async def get_metric_data(self, metric_type: MetricType) -> MetricData:
+    async def get_metric_data(self, metric_type: MetricType, partner_id: str) -> MetricData:
         pass
 
 
@@ -55,8 +55,8 @@ class ClickHouseRepository(ClickHouseRepositoryInterface):
     def __init__(self, connection):
         self._connection = connection
 
-    async def get_metric_data(self, metric_type: MetricType) -> MetricData:
-        query = self._get_query_for_metric(metric_type)
+    async def get_metric_data(self, metric_type: MetricType, partner_id: str) -> MetricData:
+        query = self._get_query_for_metric(metric_type, partner_id)
 
         async with self._connection.cursor() as cursor:
             await cursor.execute(query)
@@ -211,161 +211,161 @@ class ClickHouseRepository(ClickHouseRepositoryInterface):
             case _:
                 raise ValueError
 
-    def _get_query_for_metric(self, metric_type: MetricType) -> str:
+    def _get_query_for_metric(self, metric_type: MetricType, partner_id: str) -> str:
         queries = {
-            MetricType.DAU: """
+            MetricType.DAU: f"""
                 SELECT uniq(user_id)
                 FROM user_events_storage
-                WHERE toDate(timestamp) = today() AND event_type = 'user_login'
+                WHERE partner_id = '{partner_id}' AND toDate(timestamp) = today() AND event_type = 'user_login'
             """,
-            MetricType.WAU: """
+            MetricType.WAU: f"""
                 SELECT uniq(user_id)
                 FROM user_events_storage
-                WHERE timestamp >= now() - INTERVAL 7 DAY AND event_type = 'user_login'
+                WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 7 DAY AND event_type = 'user_login'
             """,
-            MetricType.MAU: """
+            MetricType.MAU: f"""
                 SELECT uniq(user_id)
                 FROM user_events_storage
-                WHERE timestamp >= now() - INTERVAL 30 DAY AND event_type = 'user_login'
+                WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 30 DAY AND event_type = 'user_login'
             """,
-            MetricType.NEW_REGISTRATIONS_TODAY: """
+            MetricType.NEW_REGISTRATIONS_TODAY: f"""
                 SELECT count()
                 FROM user_events_storage
-                WHERE toDate(timestamp) = today() AND event_type = 'user_registered'
+                WHERE partner_id = '{partner_id}' AND toDate(timestamp) = today() AND event_type = 'user_registered'
             """,
-            MetricType.DAILY_REVENUE: """
+            MetricType.DAILY_REVENUE: f"""
                 SELECT sum(amount)
                 FROM transaction_events_storage
-                WHERE toDate(timestamp) = today()
+                WHERE partner_id = '{partner_id}' AND toDate(timestamp) = today()
             """,
-            MetricType.AVERAGE_ORDER_VALUE: """
+            MetricType.AVERAGE_ORDER_VALUE: f"""
                 SELECT CASE WHEN count() > 0 THEN avg(amount) ELSE 0 END
                 FROM transaction_events_storage
-                WHERE timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 7 DAY
             """,
-            MetricType.ARPU_7_DAYS: """
+            MetricType.ARPU_7_DAYS: f"""
                 SELECT CASE WHEN uniq(user_id) > 0 THEN sum(amount) / uniq(user_id) ELSE 0 END
                 FROM transaction_events_storage
-                WHERE timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 7 DAY
             """,
-            MetricType.TOTAL_TRANSACTIONS_TODAY: """
+            MetricType.TOTAL_TRANSACTIONS_TODAY: f"""
                 SELECT count()
                 FROM transaction_events_storage
-                WHERE toDate(timestamp) = today()
+                WHERE partner_id = '{partner_id}' AND toDate(timestamp) = today()
             """,
-            MetricType.REVENUE_TREND_30_DAYS: """
+            MetricType.REVENUE_TREND_30_DAYS: f"""
                 SELECT toDate(timestamp), sum(amount)
                 FROM transaction_events_storage
-                WHERE timestamp >= now() - INTERVAL 30 DAY
+                WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 30 DAY
                 GROUP BY toDate(timestamp) ORDER BY toDate(timestamp)
             """,
-            MetricType.USER_ACTIVITY_TREND_30_DAYS: """
+            MetricType.USER_ACTIVITY_TREND_30_DAYS: f"""
                 SELECT toDate(timestamp), uniq(user_id)
                 FROM user_events_storage
-                WHERE timestamp >= now() - INTERVAL 30 DAY AND event_type = 'user_login'
+                WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 30 DAY AND event_type = 'user_login'
                 GROUP BY toDate(timestamp) ORDER BY toDate(timestamp)
             """,
-            MetricType.TOP_PAGES_BY_VIEWS: """
+            MetricType.TOP_PAGES_BY_VIEWS: f"""
                 SELECT page, count()
                 FROM interaction_events_storage
-                WHERE event_type = 'page_view' AND timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND event_type = 'page_view' AND timestamp >= now() - INTERVAL 7 DAY
                 AND page IS NOT NULL
                 GROUP BY page ORDER BY count() DESC LIMIT 10
             """,
-            MetricType.CART_ABANDONMENT_RATE: """
+            MetricType.CART_ABANDONMENT_RATE: f"""
                 WITH
-                    cart_users AS (SELECT uniq(user_id) as users FROM interaction_events_storage WHERE event_type = 'item_added_to_cart' AND timestamp >= now() - INTERVAL 7 DAY),
-                    purchase_users AS (SELECT uniq(user_id) as users FROM transaction_events_storage WHERE timestamp >= now() - INTERVAL 7 DAY)
+                    cart_users AS (SELECT uniq(user_id) as users FROM interaction_events_storage WHERE partner_id = '{partner_id}' AND event_type = 'item_added_to_cart' AND timestamp >= now() - INTERVAL 7 DAY),
+                    purchase_users AS (SELECT uniq(user_id) as users FROM transaction_events_storage WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 7 DAY)
                 SELECT CASE WHEN cart_users.users > 0 THEN round((1 - purchase_users.users / cart_users.users) * 100, 2) ELSE 0 END
                 FROM cart_users, purchase_users
             """,
-            MetricType.SEARCH_QUERIES: """
+            MetricType.SEARCH_QUERIES: f"""
                 SELECT query, count()
                 FROM interaction_events_storage
-                WHERE event_type = 'search' AND timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND event_type = 'search' AND timestamp >= now() - INTERVAL 7 DAY
                 AND query IS NOT NULL
                 GROUP BY query ORDER BY count() DESC LIMIT 10
             """,
-            MetricType.USER_JOURNEY_FUNNEL: """
+            MetricType.USER_JOURNEY_FUNNEL: f"""
                 SELECT toDate(timestamp),
                        uniq(case when event_type = 'page_view' then user_id end),
                        uniq(case when event_type = 'item_added_to_cart' then user_id end),
                        uniq(case when event_type = 'search' then user_id end)
                 FROM interaction_events_storage
-                WHERE timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 7 DAY
                 GROUP BY toDate(timestamp) ORDER BY toDate(timestamp)
             """,
-            MetricType.TRANSACTION_VOLUME_BY_CURRENCY: """
+            MetricType.TRANSACTION_VOLUME_BY_CURRENCY: f"""
                 SELECT currency, count(), sum(amount)
                 FROM transaction_events_storage
-                WHERE timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 7 DAY
                 GROUP BY currency ORDER BY count() DESC
             """,
-            MetricType.MOST_CLICKED_ELEMENTS: """
+            MetricType.MOST_CLICKED_ELEMENTS: f"""
                 SELECT element_name, count()
                 FROM interaction_events_storage
-                WHERE event_type = 'element_click' AND timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND event_type = 'element_click' AND timestamp >= now() - INTERVAL 7 DAY
                 AND element_name IS NOT NULL
                 GROUP BY element_name ORDER BY count() DESC LIMIT 10
             """,
-            MetricType.USER_REGISTRATION_TREND: """
+            MetricType.USER_REGISTRATION_TREND: f"""
                 SELECT toDate(timestamp), count()
                 FROM user_events_storage
-                WHERE event_type = 'user_registered' AND timestamp >= now() - INTERVAL 30 DAY
+                WHERE partner_id = '{partner_id}' AND event_type = 'user_registered' AND timestamp >= now() - INTERVAL 30 DAY
                 GROUP BY toDate(timestamp) ORDER BY toDate(timestamp)
             """,
-            MetricType.FILTER_USAGE: """
+            MetricType.FILTER_USAGE: f"""
                 SELECT filter_name, filter_value, count()
                 FROM interaction_events_storage
-                WHERE event_type = 'filter_applied' AND timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND event_type = 'filter_applied' AND timestamp >= now() - INTERVAL 7 DAY
                 AND filter_name IS NOT NULL
                 GROUP BY filter_name, filter_value ORDER BY count() DESC LIMIT 15
             """,
-            MetricType.CONVERSION_RATE_CART_TO_PURCHASE: """
+            MetricType.CONVERSION_RATE_CART_TO_PURCHASE: f"""
                 WITH
-                    transactions_count AS (SELECT count() as cnt FROM transaction_events_storage WHERE timestamp >= now() - INTERVAL 7 DAY),
-                    cart_users_count AS (SELECT uniq(user_id) as cnt FROM interaction_events_storage WHERE event_type = 'item_added_to_cart' AND timestamp >= now() - INTERVAL 7 DAY)
+                    transactions_count AS (SELECT count() as cnt FROM transaction_events_storage WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 7 DAY),
+                    cart_users_count AS (SELECT uniq(user_id) as cnt FROM interaction_events_storage WHERE partner_id = '{partner_id}' AND event_type = 'item_added_to_cart' AND timestamp >= now() - INTERVAL 7 DAY)
                 SELECT CASE WHEN cart_users_count.cnt > 0 THEN round(transactions_count.cnt * 100.0 / cart_users_count.cnt, 2) ELSE 0 END
                 FROM transactions_count, cart_users_count
             """,
-            MetricType.USER_ENGAGEMENT_SCORE: """
+            MetricType.USER_ENGAGEMENT_SCORE: f"""
                 SELECT CASE WHEN uniq(user_id) > 0 THEN round(count() * 1.0 / uniq(user_id), 2) ELSE 0 END
                 FROM interaction_events_storage
-                WHERE timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 7 DAY
             """,
-            MetricType.MOST_ACTIVE_EVENT_TYPE: """
+            MetricType.MOST_ACTIVE_EVENT_TYPE: f"""
                 SELECT event_type
                 FROM interaction_events_storage
-                WHERE timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 7 DAY
                 GROUP BY event_type ORDER BY count() DESC LIMIT 1
             """,
-            MetricType.TOTAL_PAGE_VIEWS: """
+            MetricType.TOTAL_PAGE_VIEWS: f"""
                 SELECT count()
                 FROM interaction_events_storage
-                WHERE event_type = 'page_view' AND timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND event_type = 'page_view' AND timestamp >= now() - INTERVAL 7 DAY
             """,
-            MetricType.TOP_PERFORMING_PRODUCTS: """
+            MetricType.TOP_PERFORMING_PRODUCTS: f"""
                 SELECT item_id, count(), uniq(user_id)
                 FROM interaction_events_storage
-                WHERE event_type = 'item_added_to_cart' AND timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND event_type = 'item_added_to_cart' AND timestamp >= now() - INTERVAL 7 DAY
                 GROUP BY item_id ORDER BY count() DESC LIMIT 10
             """,
-            MetricType.ACTIVITY_BY_HOUR: """
+            MetricType.ACTIVITY_BY_HOUR: f"""
                 SELECT toHour(timestamp), count()
                 FROM interaction_events_storage
-                WHERE timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 7 DAY
                 GROUP BY toHour(timestamp) ORDER BY toHour(timestamp)
             """,
-            MetricType.EVENT_TYPE_DISTRIBUTION: """
+            MetricType.EVENT_TYPE_DISTRIBUTION: f"""
                 SELECT event_type, count()
                 FROM interaction_events_storage
-                WHERE timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 7 DAY
                 GROUP BY event_type ORDER BY count() DESC
             """,
-            MetricType.DAILY_ACTIVITY_TREND: """
+            MetricType.DAILY_ACTIVITY_TREND: f"""
                 SELECT toDate(timestamp), count()
                 FROM interaction_events_storage
-                WHERE timestamp >= now() - INTERVAL 7 DAY
+                WHERE partner_id = '{partner_id}' AND timestamp >= now() - INTERVAL 7 DAY
                 GROUP BY toDate(timestamp) ORDER BY toDate(timestamp)
             """,
         }

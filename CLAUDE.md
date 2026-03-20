@@ -150,7 +150,8 @@ ACTIVITY_BY_HOUR, EVENT_TYPE_DISTRIBUTION, DAILY_ACTIVITY_TREND
 
 ### Инфраструктура
 - ClickHouse 23.8, Kafka 7.4.0 + Zookeeper
-- Docker Compose (app:8000, frontend:3000, clickhouse:8123,9000, kafka:9092)
+- PostgreSQL 16 (партнеры и аутентификация)
+- Docker Compose (app:8000, frontend:3000, clickhouse:8123,9000, kafka:9092, postgres:5432)
 
 ## Требования к коду
 
@@ -160,4 +161,44 @@ ACTIVITY_BY_HOUR, EVENT_TYPE_DISTRIBUTION, DAILY_ACTIVITY_TREND
 - ✅ Dependency Injection для тестируемости
 - ✅ Слоистая архитектура: endpoints -> services -> repositories
 - ✅ match-case вместо длинных if-elif
-- ✅ Async/await архитектура
+- ✅ Async/await в Python
+
+## Мультитенантность
+
+Платформа поддерживает изоляцию данных по партнерам через систему аутентификации.
+
+### Партнеры и аутентификация
+- PostgreSQL для хранения партнеров (Partner модель)
+- JWT токены для фронтенда (срок действия 30 минут)
+- Secret keys для API событий
+- Bcrypt хэширование паролей
+
+### API эндпоинты партнеров
+- `POST /partners` - создание партнера (admin token required)
+- `POST /partners/login` - авторизация партнера
+
+### Аутентификация событий
+- Все `/events/*` требуют заголовок `X-Partner-Secret`
+- События автоматически привязываются к партнеру
+
+### Аутентификация дашборда  
+- `GET /dashboard` требует JWT Bearer токен
+- Возвращает метрики только для авторизованного партнера
+
+### ClickHouse изоляция данных
+- Все таблицы содержат поле `partner_id`
+- SQL запросы фильтруют по `partner_id`
+
+### Frontend
+- React компонент авторизации партнеров
+- JWT токен в localStorage
+- Автоматическое добавление Bearer токена в запросы
+
+### Флоу взаимодействия
+```
+1. Партнер авторизуется: POST /partners/login → получает JWT
+2. Frontend сохраняет JWT → добавляет в заголовки запросов
+3. Dashboard запросы фильтруются по partner_id из JWT
+4. API события требуют X-Partner-Secret заголовок
+5. События привязываются к партнеру автоматически
+```
