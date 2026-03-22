@@ -1,5 +1,6 @@
 import secrets
 from abc import ABC, abstractmethod
+from datetime import datetime
 
 import bcrypt
 
@@ -20,6 +21,10 @@ class PartnerServiceInterface(ABC):
 
     @abstractmethod
     async def get_partner_by_secret_key(self, secret_key: str) -> Partner | None:
+        ...
+
+    @abstractmethod
+    async def update_partner(self, partner_id: str, is_banned: bool | None = None, active_until: datetime | None = None) -> bool:
         ...
 
 
@@ -48,3 +53,6 @@ class PartnerService(PartnerServiceInterface):
 
     async def get_partner_by_secret_key(self, secret_key: str) -> Partner | None:
         return await self._partner_repository.get_by_secret_key(secret_key)
+
+    async def update_partner(self, partner_id: str, is_banned: bool | None = None, active_until: datetime | None = None) -> bool:
+        return await self._partner_repository.update_partner_admin_fields(partner_id, is_banned, active_until)

@@ -16,6 +16,7 @@ import {
 } from '@mui/icons-material';
 import { GridColDef } from '@mui/x-data-grid';
 import { dashboardApi } from '../services/api';
+import { ExportService } from '../services/exportService';
 import MetricCard from './MetricCard';
 import ChartCard from './ChartCard';
 import DataTable from './DataTable';
@@ -31,6 +32,7 @@ const ComprehensiveDashboard: React.FC<ComprehensiveDashboardProps> = ({ onLogou
   const [metrics, setMetrics] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
     const fetchMetrics = async () => {
@@ -48,6 +50,22 @@ const ComprehensiveDashboard: React.FC<ComprehensiveDashboardProps> = ({ onLogou
 
     fetchMetrics();
   }, []);
+
+  const handleExportPDF = async () => {
+    setIsExporting(true);
+    try {
+      const result = await ExportService.exportToPDF(metrics);
+      if (result.success) {
+        console.log(`PDF exported successfully: ${result.fileName}`);
+      } else {
+        console.error('PDF export failed:', result.error);
+      }
+    } catch (error) {
+      console.error('PDF export error:', error);
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -68,7 +86,7 @@ const ComprehensiveDashboard: React.FC<ComprehensiveDashboardProps> = ({ onLogou
   if (error) {
     return (
       <Box sx={{ minHeight: '100vh', background: theme.palette.background.default }}>
-        <TopBar onLogout={onLogout} />
+        <TopBar onLogout={onLogout} onExportPDF={handleExportPDF} />
         <Container sx={{ py: 4 }}>
           <Alert 
             severity="error"
@@ -166,9 +184,9 @@ const ComprehensiveDashboard: React.FC<ComprehensiveDashboardProps> = ({ onLogou
 
   return (
     <Box sx={{ minHeight: '100vh', background: theme.palette.background.default }}>
-      <TopBar onLogout={onLogout} />
+      <TopBar onLogout={onLogout} onExportPDF={handleExportPDF} />
 
-      <Container maxWidth="xl" sx={{ py: 4 }}>
+      <Container maxWidth="xl" sx={{ py: 4 }} data-dashboard="main">
         <Box sx={{ mb: 4 }}>
           <Typography 
             variant="h4" 

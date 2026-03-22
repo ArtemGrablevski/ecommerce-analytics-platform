@@ -16,14 +16,16 @@ import {
   Notifications,
   Settings,
   Logout,
+  PictureAsPdf,
 } from '@mui/icons-material';
 
 interface TopBarProps {
   onLogout: () => void;
   partnerName?: string;
+  onExportPDF?: () => void;
 }
 
-const TopBar: React.FC<TopBarProps> = ({ onLogout, partnerName = 'Partner' }) => {
+const TopBar: React.FC<TopBarProps> = ({ onLogout, partnerName = 'Partner', onExportPDF }) => {
   const theme = useTheme();
 
   return (
@@ -96,6 +98,19 @@ const TopBar: React.FC<TopBarProps> = ({ onLogout, partnerName = 'Partner' }) =>
             }}
           >
             <Notifications sx={{ fontSize: 20, color: theme.palette.text.secondary }} />
+          </IconButton>
+
+          <IconButton
+            onClick={onExportPDF}
+            sx={{
+              p: 1.5,
+              borderRadius: 2,
+              '&:hover': {
+                backgroundColor: theme.palette.mode === 'light' ? '#F8FAFC' : '#334155',
+              },
+            }}
+          >
+            <PictureAsPdf sx={{ fontSize: 20, color: theme.palette.text.secondary }} />
           </IconButton>
 
           <IconButton
