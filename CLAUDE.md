@@ -13,28 +13,6 @@
 - React Frontend (React + TypeScript + Material-UI)
 - Docker Compose (развертывание)
 
-## Структура проекта
-
-```
-src/
-├── config.py - настройки приложения
-├── enums.py - EventType, KafkaTopic, MetricType
-├── di.py - DI контейнер (dependency-injector)
-├── main.py - FastAPI app с lifespan
-├── endpoints/
-│   ├── events.py - 10 эндпоинтов для отправки событий
-│   └── dashboard.py - GET /dashboard (все 26 метрик)
-├── services/
-│   ├── event_service.py - обработка событий
-│   ├── kafka_producer.py, kafka_admin.py
-│   └── dashboard/dashboard_service.py
-├── dto/
-│   ├── events.py - DTO для событий
-│   └── dashboard/metric_data.py - MetricData + 26 dataclass
-└── repositories/
-    └── clickhouse_repository.py - async через asynch
-```
-
 ## API Эндпоинты
 
 ### События (POST /events/)
@@ -116,31 +94,13 @@ ACTIVITY_BY_HOUR, EVENT_TYPE_DISTRIBUTION, DAILY_ACTIVITY_TREND
 
 Все классы наследуются от MetricData и используются в ClickHouseRepository._parse_metric_result().
 
-## Основные классы и сервисы
-
-### EventService (src/services/event_service.py)
-- `process_event(event: BaseEvent)` - обработка событий через match-case
-- Отправляет события в соответствующий Kafka топик
-
-### ClickHouseRepository (src/repositories/clickhouse_repository.py)
-- `get_metric_data(metric_type: MetricType) -> MetricData` - получение метрики
-- `_get_query_for_metric()` - SQL запросы для каждой метрики
-- `_parse_metric_result()` - парсинг результатов в MetricData классы
-
-### DashboardService (src/services/dashboard/dashboard_service.py)
-- `get_all_metrics() -> dict[MetricType, MetricData]` - получение всех метрик
-
-### Container (src/di.py)
-- DI контейнер с Singleton и Factory провайдерами
-- Управляет зависимостями: kafka_producer, clickhouse_repository, event_service, dashboard_service
 
 ## Технологии
 
 ### Backend
-- fastapi==0.104.1, uvicorn, pydantic==2.5.2
-- aiokafka==0.10.0, kafka-python==2.0.2
-- asynch==0.2.3 - async ClickHouse клиент
-- dependency-injector==4.41.0
+- fastapi, uvicorn, pydantic, dependency-injector
+- aiokafka
+- asynch - async ClickHouse клиент
 
 ### Frontend
 - React 18 + TypeScript
@@ -157,11 +117,8 @@ ACTIVITY_BY_HOUR, EVENT_TYPE_DISTRIBUTION, DAILY_ACTIVITY_TREND
 
 - ❌ Никаких комментариев и docstrings
 - ✅ Type hints: современные (list[T], dict[K,V], A | B), избегать Any
-- ✅ Избегать глобальных переменных
-- ✅ Dependency Injection для тестируемости
+- ✅ Избегать глобальных переменных, Dependency Injection для тестируемости
 - ✅ Слоистая архитектура: endpoints -> services -> repositories
-- ✅ match-case вместо длинных if-elif
-- ✅ Async/await в Python
 
 ## Мультитенантность
 
