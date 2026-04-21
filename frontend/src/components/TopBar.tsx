@@ -17,15 +17,19 @@ import {
   Settings,
   Logout,
   PictureAsPdf,
+  AdminPanelSettings,
+  Person,
 } from '@mui/icons-material';
 
 interface TopBarProps {
   onLogout: () => void;
   partnerName?: string;
   onExportPDF?: () => void;
+  onNavigateToAdmin?: () => void;
+  onOpenProfile?: () => void;
 }
 
-const TopBar: React.FC<TopBarProps> = ({ onLogout, partnerName = 'Partner', onExportPDF }) => {
+const TopBar: React.FC<TopBarProps> = ({ onLogout, partnerName = 'Partner', onExportPDF, onNavigateToAdmin, onOpenProfile }) => {
   const theme = useTheme();
 
   return (
@@ -111,6 +115,34 @@ const TopBar: React.FC<TopBarProps> = ({ onLogout, partnerName = 'Partner', onEx
             }}
           >
             <PictureAsPdf sx={{ fontSize: 20, color: theme.palette.text.secondary }} />
+          </IconButton>
+
+          {onNavigateToAdmin && (
+            <IconButton
+              onClick={onNavigateToAdmin}
+              sx={{
+                p: 1.5,
+                borderRadius: 2,
+                '&:hover': {
+                  backgroundColor: theme.palette.mode === 'light' ? '#F8FAFC' : '#334155',
+                },
+              }}
+            >
+              <AdminPanelSettings sx={{ fontSize: 20, color: theme.palette.text.secondary }} />
+            </IconButton>
+          )}
+
+          <IconButton
+            onClick={onOpenProfile}
+            sx={{
+              p: 1.5,
+              borderRadius: 2,
+              '&:hover': {
+                backgroundColor: theme.palette.mode === 'light' ? '#F8FAFC' : '#334155',
+              },
+            }}
+          >
+            <Person sx={{ fontSize: 20, color: theme.palette.text.secondary }} />
           </IconButton>
 
           <IconButton

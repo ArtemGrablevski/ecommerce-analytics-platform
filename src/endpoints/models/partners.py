@@ -19,3 +19,10 @@ class PartnerResponse(BaseModel):
 class PartnerUpdateRequest(BaseModel):
     is_banned: bool | None = None
     active_until: datetime | None = None
+
+
+class PartnerProfileResponse(BaseModel):
+    id: uuid.UUID
+    name: str
+    is_banned: bool
+    active_until: datetime | None

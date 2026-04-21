@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import String, Boolean, DateTime
+from sqlalchemy import String, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -15,5 +15,5 @@ class Partner(Base):
     name: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     secret_key: Mapped[str] = mapped_column(String(24), nullable=False)
-    is_banned: Mapped[bool] = mapped_column(Boolean, server_default=False, nullable=False)
-    active_until: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    is_banned: Mapped[bool] = mapped_column(server_default=text("false"), nullable=False)
+    active_until: Mapped[datetime | None] = mapped_column(nullable=True)

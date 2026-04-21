@@ -24,7 +24,13 @@ class PartnerServiceInterface(ABC):
         ...
 
     @abstractmethod
-    async def update_partner(self, partner_id: str, is_banned: bool | None = None, active_until: datetime | None = None) -> bool:
+    async def update_partner(
+        self, partner_id: str, is_banned: bool | None = None, active_until: datetime | None = None
+    ) -> bool:
+        ...
+
+    @abstractmethod
+    async def get_partner_by_id(self, partner_id: str) -> Partner | None:
         ...
 
 
@@ -54,5 +60,10 @@ class PartnerService(PartnerServiceInterface):
     async def get_partner_by_secret_key(self, secret_key: str) -> Partner | None:
         return await self._partner_repository.get_by_secret_key(secret_key)
 
-    async def update_partner(self, partner_id: str, is_banned: bool | None = None, active_until: datetime | None = None) -> bool:
+    async def update_partner(
+        self, partner_id: str, is_banned: bool | None = None, active_until: datetime | None = None
+    ) -> bool:
         return await self._partner_repository.update_partner_admin_fields(partner_id, is_banned, active_until)
+
+    async def get_partner_by_id(self, partner_id: str) -> Partner | None:
+        return await self._partner_repository.get_by_id(partner_id)

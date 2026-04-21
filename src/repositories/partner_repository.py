@@ -32,11 +32,11 @@ class PartnerRepository:
 
     async def get_by_id(self, partner_id: str) -> Partner | None:
         uuid_id = uuid.UUID(partner_id)
-        return await self.session.scalar(
-            select(Partner).where(Partner.id == uuid_id)
-        )
+        return await self.session.scalar(select(Partner).where(Partner.id == uuid_id))
 
-    async def update_partner_admin_fields(self, partner_id: str, is_banned: bool | None = None, active_until: datetime = None) -> bool:
+    async def update_partner_admin_fields(
+        self, partner_id: str, is_banned: bool | None = None, active_until: datetime = None
+    ) -> bool:
         partner = await self.get_by_id(partner_id)
         if not partner:
             return False

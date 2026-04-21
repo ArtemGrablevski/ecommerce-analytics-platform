@@ -12,9 +12,10 @@ import axios from 'axios';
 
 interface LoginProps {
   onLoginSuccess: () => void;
+  onNavigateToAdmin?: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
+const Login: React.FC<LoginProps> = ({ onLoginSuccess, onNavigateToAdmin }) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);

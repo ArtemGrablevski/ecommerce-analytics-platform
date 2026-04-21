@@ -36,5 +36,10 @@ export const dashboardApi = {
   getAllMetrics: async (): Promise<DashboardResponse> => {
     const response = await apiClient.get('/dashboard');
     return response.data;
+  },
+  
+  getProfile: async () => {
+    const response = await apiClient.get('/partners/me');
+    return response.data;
   }
 };
